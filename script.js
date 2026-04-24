@@ -26,7 +26,8 @@ const Engine = {
         document.getElementById('wave-container')?.classList.add('speaking');
         this.synth.cancel();
         setTimeout(() => {
-            const utter = new SpeechSynthesisUtterance(text);
+            const cleanText = text.replace(/-/g, ' minus ');
+            const utter = new SpeechSynthesisUtterance(cleanText);
             utter.voice = this.voice;
             utter.rate = 0.85;
             utter.onend = () => { document.getElementById('wave-container')?.classList.remove('speaking'); if(callback) callback(); };
@@ -37,7 +38,7 @@ const Engine = {
     renderGame() {
         document.getElementById('game-container').innerHTML = `
             <div class="home-btn" onclick="Engine.showModal()">
-                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                🏠
             </div>
             <div id="score-shield">⭐ Score: 0 / ${this.questions.length}</div>
             <div id="wave-container">
@@ -59,6 +60,9 @@ const Engine = {
         const q = this.questions[this.currentIdx];
         const isMath = this.mode === 'math';
         const isSub = this.mode === 'subtraction';
+        const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
+        const fruitName = fruitMap[q.fruit] || 'fruit';
+        const pluralFruit = fruitName + 's';
         const options = [q.capital];
         while (options.length < 4) {
             const rand = QUIZ_DATA[this.mode][Math.floor(Math.random() * QUIZ_DATA[this.mode].length)].capital;
@@ -73,17 +77,17 @@ const Engine = {
             document.getElementById('math-equation-area').innerHTML = `<h3>${q.name} = ?</h3>`;
 
             if (isMath) {
-                const group1 = Array(q.num1).fill('🍎').join('');
-                const group2 = Array(q.num2).fill('🍎').join('');
+                const group1 = Array(q.num1).fill(q.fruit).join('');
+                const group2 = Array(q.num2).fill(q.fruit).join('');
                 document.getElementById('counting-zone').innerHTML = `
                     <div class="emoji-group">${group1}</div>
                     <div class="math-symbol">+</div>
                     <div class="emoji-group">${group2}</div>
                 `;
             } else {
-                const group1 = Array(q.num1).fill('🍎').join('');
-                const group2 = Array(q.num2).fill('🍎').join('');
-                const resultEmojis = Array(q.num1).fill('🍎').map((e, idx) =>
+                const group1 = Array(q.num1).fill(q.fruit).join('');
+                const group2 = Array(q.num2).fill(q.fruit).join('');
+                const resultEmojis = Array(q.num1).fill(q.fruit).map((e, idx) =>
                     `<span class="${idx >= (q.num1 - q.num2) ? 'strikethrough' : ''}">${e}</span>`
                 ).join('');
 
@@ -105,15 +109,15 @@ const Engine = {
 
         const sequence = isMath
             ? [
-                { text: `If you have ${q.num1} apples.` },
-                { text: `And daddy gives you ${q.num2} more.` },
-                { text: `${q.name} equals what?` },
+                { text: `If you have ${q.num1} ${q.num1 === 1 ? fruitName : pluralFruit}.` },
+                { text: `And daddy gives you ${q.num2} more ${q.num2 === 1 ? fruitName : pluralFruit}.` },
+                { text: `What is ${q.name}?` },
                 ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
             ]
             : isSub
             ? [
                 { text: `${q.num1} minus ${q.num2}.` },
-                { text: `If you have ${q.num1} apples, and you give ${q.num2} to your friend, how many are left? What is ${q.name}?` },
+                { text: `If you have ${q.num1} ${q.num1 === 1 ? fruitName : pluralFruit}, and you give ${q.num2} to your friend, how many are left? What is ${q.name}?` },
                 ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
             ]
             : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
@@ -133,7 +137,7 @@ const Engine = {
 
         if (choice === correct) {
             this.score++;
-            const modeTitle = this.mode === 'math' ? '🧮 Addition' : (this.mode === 'states' ? '🗺️ Indian States' : '📍 Union Territories');
+            const modeTitle = this.mode === 'math' ? '🧮 Addition' : (this.mode === 'subtraction' ? '➖ Subtraction' : (this.mode === 'states' ? '🗺️ Indian States' : '📍 Union Territories'));
             document.getElementById('score-shield').innerText = `⭐ ${modeTitle} | Score: ${this.score} / ${this.questions.length}`;
             btn.classList.add('correct');
             this.speak(this.mode === 'math' ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
@@ -143,7 +147,7 @@ const Engine = {
             const msg = this.mode === 'math'
                 ? `Not quite! ${this.questions[this.currentIdx].name} is ${correct}.`
                 : this.mode === 'subtraction'
-                ? `Not quite! ${this.questions[this.currentIdx].name} leaves ${correct}.`
+                ? `Not quite! ${this.questions[this.currentIdx].num1} minus ${this.questions[this.currentIdx].num2} is ${correct}.`
                 : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
             this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         }

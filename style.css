@@ -23,10 +23,13 @@ body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-heig
     display: flex; flex-wrap: wrap; gap: 5px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px;
 }
 .plus-sign { font-size: 2rem; font-weight: bold; color: #facc15; }
-.strikethrough { position: relative; opacity: 0.2; filter: grayscale(1); }
+.strikethrough {
+    position: relative; display: inline-block; opacity: 0.5; filter: grayscale(0.05);
+}
 .strikethrough::after {
-    content: '✖'; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    color: red; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+    content: '❌'; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5em; color: var(--error);
     pointer-events: none;
 }
 .math-symbol { font-size: 2rem; font-weight: bold; color: #facc15; margin: 0 10px; }

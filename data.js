@@ -42,21 +42,27 @@ const QUIZ_DATA = {
     math: Array.from({ length: 20 }, (_, i) => {
         const a = Math.floor(Math.random() * 9) + 1;
         const b = Math.floor(Math.random() * 9) + 1;
+        const fruits = ['🍎', '🍊', '🍌', '🍇', '🍓', '🥭'];
+        const fruit = fruits[Math.floor(Math.random() * fruits.length)];
         return {
             num1: a,
             num2: b,
             capital: (a + b).toString(),
-            name: `${a} + ${b}`
+            name: `${a} + ${b}`,
+            fruit: fruit
         };
     }),
-    subtraction: Array.from({ length: 10 }, (_, i) => {
+    subtraction: Array.from({ length: 20 }, (_, i) => {
         const a = Math.floor(Math.random() * 9) + 1;
         const b = Math.floor(Math.random() * a) + 1;
+        const fruits = ['🍎', '🍊', '🍌', '🍇', '🍓', '🥭'];
+        const fruit = fruits[Math.floor(Math.random() * fruits.length)];
         return {
             num1: a,
             num2: b,
             capital: (a - b).toString(),
-            name: `${a} - ${b}`
+            name: `${a} - ${b}`,
+            fruit: fruit
         };
     })
 };
