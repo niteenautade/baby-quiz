@@ -221,25 +221,26 @@ const Engine = {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} ${q.name}</h3>` +
-                options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
-         } else if (isFamilies) {
-             document.getElementById('math-equation-area').classList.add('hidden');
-             document.getElementById('counting-zone').classList.add('hidden');
-             document.getElementById('monument-image-area').classList.add('hidden');
+                options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+          } else if (isFamilies) {
+              document.getElementById('math-equation-area').classList.add('hidden');
+              document.getElementById('counting-zone').classList.add('hidden');
+              document.getElementById('monument-image-area').classList.remove('hidden');
+              document.getElementById('monument-image-area').innerHTML = `<h3>${q.name}</h3><img src="${q.image}" class="monument-display" alt="${q.name}">`;
               document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} What is a baby ${q.name} called?</h3>` +
-                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
-         } else if (isHomes) {
+                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+          } else if (isHomes) {
              document.getElementById('math-equation-area').classList.add('hidden');
              document.getElementById('counting-zone').classList.add('hidden');
              document.getElementById('monument-image-area').classList.add('hidden');
-              document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} Where does a ${q.name} live?</h3>` +
-                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
+                document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} Where does a ${q.name} live?</h3>` +
+                    options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
          } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             const questionText = isMon ? `In which city is ${q.name} located?` : `What is the capital of ${q.name}?`;
              document.getElementById('quiz-area').innerHTML = `<h3>${questionText}</h3>` +
-                 options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${isMon ? opt : String.fromCharCode(65+i)+': '+opt}</button>`).join('');
+                 options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
         }
 
         // Build speech sequence
@@ -263,20 +264,20 @@ const Engine = {
             ]
             : isSymbols
             ? [
-                { text: `What is the ${q.name} of India?` },
-                ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))
-            ]
-             : isFamilies
-             ? [
-                 { text: `What is a baby ${q.name} called?` },
-                 ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))
+                 { text: `What is the ${q.name} of India?` },
+                 ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
                ]
-             : isHomes
-             ? [
-                 { text: `Where does a ${q.name} live?` },
-                 ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))
-               ]
-             : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
+              : isFamilies
+              ? [
+                  { text: `What is a baby ${q.name} called?` },
+                  ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                ]
+              : isHomes
+              ? [
+                  { text: `Where does a ${q.name} live?` },
+                  ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                ]
+              : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
 
          for (const step of sequence) {
              if (this.userClicked) break;
