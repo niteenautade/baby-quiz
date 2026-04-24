@@ -7,6 +7,7 @@ const Engine = {
     synth: window.speechSynthesis,
     voice: null,
     historyPushed: false,
+    assistTimer: null,
 
     MODE_MAP: {
         'math': '🧮 Addition',
@@ -65,27 +66,38 @@ const Engine = {
      renderGame() {
          const modeTitle = this.MODE_MAP[this.mode] || '';
          document.getElementById('game-container').innerHTML = `
-            <div class="home-btn" onclick="location.reload()">
-                🏠
-            </div>
-            <div id="score-shield">⭐ Score: 0 / ${this.questions.length}</div>
-            <div id="wave-container">
-                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            </div>
-            <div id="math-equation-area" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
-            <div id="counting-zone" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
-            <div id="monument-image-area" class="${this.mode === 'monuments' ? '' : 'hidden'}"></div>
-            <div id="quiz-area"></div>
-        `;
-    },
+             <div class="home-btn" onclick="Engine.cleanupAndExit()">
+                 🏠
+             </div>
+             <div id="score-shield">⭐ Score: 0 / ${this.questions.length}</div>
+             <div id="wave-container">
+                 <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+             </div>
+             <div id="math-equation-area" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
+             <div id="counting-zone" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
+             <div id="monument-image-area" class="${this.mode === 'monuments' ? '' : 'hidden'}"></div>
+             <div id="quiz-area"></div>
+             <div id="timer-indicator" class="active"></div>
+         `;
+     },
 
-     async nextQuestion() {
-        if (this.currentIdx >= this.questions.length) {
-            this.showResults();
-            return;
-        }
+      cleanupAndExit() {
+          clearTimeout(this.assistTimer);
+          this.assistTimer = null;
+          this.synth.cancel();
+          location.reload();
+      },
 
-        this.userClicked = false;
+      async nextQuestion() {
+          if (this.currentIdx >= this.questions.length) {
+              this.showResults();
+              return;
+          }
+
+          clearTimeout(this.assistTimer);
+          this.assistTimer = null;
+
+          this.userClicked = false;
         const q = this.questions[this.currentIdx];
         const isMath = this.mode === 'math';
         const isSub = this.mode === 'subtraction';
@@ -204,30 +216,30 @@ const Engine = {
                     <div class="emoji-group">${resultEmojis}</div>
                 `;
             }
-            document.getElementById('quiz-area').innerHTML = options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+            document.getElementById('quiz-area').innerHTML = options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
         } else if (isSymbols) {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} ${q.name}</h3>` +
-                options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
+                options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
          } else if (isFamilies) {
              document.getElementById('math-equation-area').classList.add('hidden');
              document.getElementById('counting-zone').classList.add('hidden');
              document.getElementById('monument-image-area').classList.add('hidden');
-             document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} What is a baby ${q.name} called?</h3>` +
-                 options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
+              document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} What is a baby ${q.name} called?</h3>` +
+                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
          } else if (isHomes) {
              document.getElementById('math-equation-area').classList.add('hidden');
              document.getElementById('counting-zone').classList.add('hidden');
              document.getElementById('monument-image-area').classList.add('hidden');
-             document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} Where does a ${q.name} live?</h3>` +
-                 options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
+              document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} Where does a ${q.name} live?</h3>` +
+                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
          } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             const questionText = isMon ? `In which city is ${q.name} located?` : `What is the capital of ${q.name}?`;
-            document.getElementById('quiz-area').innerHTML = `<h3>${questionText}</h3>` +
-                options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${isMon ? opt : String.fromCharCode(65+i)+': '+opt}</button>`).join('');
+             document.getElementById('quiz-area').innerHTML = `<h3>${questionText}</h3>` +
+                 options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${isMon ? opt : String.fromCharCode(65+i)+': '+opt}</button>`).join('');
         }
 
         // Build speech sequence
@@ -266,18 +278,44 @@ const Engine = {
                ]
              : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
 
-        for (const step of sequence) {
-            if (this.userClicked) break;
-            if (step.id) document.getElementById(step.id).classList.add('highlight-active');
-            await new Promise(r => this.speak(step.text, r));
-            if (step.id) document.getElementById(step.id).classList.remove('highlight-active');
-        }
-    },
+         for (const step of sequence) {
+             if (this.userClicked) break;
+             if (step.id) document.getElementById(step.id).classList.add('highlight-active');
+             await new Promise(r => this.speak(step.text, r));
+             if (step.id) document.getElementById(step.id).classList.remove('highlight-active');
+         }
+
+          if (this.userClicked) return;
+
+          let timerEl = document.getElementById('timer-indicator');
+          if (timerEl) {
+              timerEl.style.transition = 'none';
+              timerEl.style.width = '100%';
+              timerEl.offsetHeight;
+              timerEl.style.transition = 'width 5s linear';
+              timerEl.style.width = '0%';
+          }
+
+         this.assistTimer = setTimeout(() => {
+             const q = this.questions[this.currentIdx];
+             let correctBtn;
+              document.querySelectorAll('#quiz-area button').forEach(btn => {
+                  if (btn.dataset.answer === q.capital) {
+                      correctBtn = btn;
+                  }
+              });
+             if (correctBtn) {
+                 this.teacherAssist(q.capital, correctBtn);
+             }
+         }, 5000);
+     },
 
      check(choice, correct, btn) {
          if (this.userClicked) return;
          this.userClicked = true;
          this.synth.cancel();
+         clearTimeout(this.assistTimer);
+         this.assistTimer = null;
 
          const isMath = this.mode === 'math';
          const isSub = this.mode === 'subtraction';
@@ -315,12 +353,53 @@ const Engine = {
 
 
 
-    showResults() {
-        const highScore = localStorage.getItem('highScore_'+this.mode) || 0;
-        if(this.score > highScore) localStorage.setItem('highScore_'+this.mode, this.score);
-        document.getElementById('game-container').innerHTML = `<h2>Mission Complete!</h2><p>Score: ${this.score} / ${this.questions.length}</p><p>High Score: ${highScore}</p><button onclick="location.reload()">Main Menu</button>`;
-        this.setupBackButtonHandler();
-    }
+     showResults() {
+         const highScore = localStorage.getItem('highScore_'+this.mode) || 0;
+         if(this.score > highScore) localStorage.setItem('highScore_'+this.mode, this.score);
+         document.getElementById('game-container').innerHTML = `<h2>Mission Complete!</h2><p>Score: ${this.score} / ${this.questions.length}</p><p>High Score: ${highScore}</p><button onclick="location.reload()">Main Menu</button>`;
+         this.setupBackButtonHandler();
+     },
+
+     async teacherAssist(correctAnswer, correctBtn) {
+         this.synth.cancel();
+         clearTimeout(this.assistTimer);
+         this.assistTimer = null;
+
+         document.querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
+
+         await new Promise(r => this.speak("Let me help you with this one!", r));
+
+         correctBtn.classList.add('correct', 'pulse');
+
+         const isMath = this.mode === 'math';
+         const isSub = this.mode === 'subtraction';
+         const isMon = this.mode === 'monuments';
+         const isSymbols = this.mode === 'symbols';
+         const isFamilies = this.mode === 'families';
+         const isHomes = this.mode === 'homes';
+
+         let answerText = '';
+         if (isMath || isSub) {
+             answerText = `${this.questions[this.currentIdx].name} is ${correctAnswer}.`;
+         } else if (isMon) {
+             answerText = `The ${this.questions[this.currentIdx].name} is located in ${correctAnswer}.`;
+         } else if (isSymbols) {
+             answerText = `The ${this.questions[this.currentIdx].name} of India is ${correctAnswer}.`;
+         } else if (isFamilies) {
+             answerText = `A baby ${this.questions[this.currentIdx].name} is called ${correctAnswer}.`;
+         } else if (isHomes) {
+             answerText = `A ${this.questions[this.currentIdx].name} lives in a ${correctAnswer}.`;
+         } else {
+             answerText = `The capital of ${this.questions[this.currentIdx].name} is ${correctAnswer}.`;
+         }
+
+         await new Promise(r => this.speak(answerText, r));
+
+         setTimeout(() => {
+             this.currentIdx++;
+             this.nextQuestion();
+         }, 2000);
+     }
 };
 Engine.synth.onvoiceschanged = () => Engine.initVoices();
 Engine.initVoices();
