@@ -80,7 +80,7 @@ const QUIZ_DATA = {
         { name: "India Gate", capital: "Delhi", phonetic: "India Gate", image: "assets/monument-images/11_India_Gate.jpg" },
         { name: "Mysore Palace", capital: "Mysuru", phonetic: "Mysore Palace", image: "assets/monument-images/12_Mysore_Palace.jpg" },
         { name: "Konark Sun Temple", capital: "Konark", phonetic: "Konark Sun Temple", image: "assets/monument-images/13_Konark_Sun_Temple.jpg" },
-        { name: "Ajanta Caves", capital: "Aurangabad", phonetic: "Ajanta Caves", image: "assets/monument-images/14_Ajanta_Caves.jpg" },
+        { name: "Ajanta Caves", capital: "Chhatrapati Sambhajinagar", phonetic: "Ajanta Caves", image: "assets/monument-images/14_Ajanta_Caves.jpg" },
         { name: "Meenakshi Temple", capital: "Madurai", phonetic: "Meenakshi Temple", image: "assets/monument-images/15_Meenakshi_Temple.jpg" },
         { name: "Vivekananda Rock", capital: "Kanyakumari", phonetic: "Vivekananda Rock", image: "assets/monument-images/16_Vivekananda_Rock.jpg" },
         { name: "Gol Gumbaz", capital: "Bijapur", phonetic: "Gol Gumbaz", image: "assets/monument-images/17_Gol_Gumbaz.jpg" },
@@ -88,7 +88,7 @@ const QUIZ_DATA = {
         { name: "Chhatrapati Shivaji Terminus", capital: "Mumbai", phonetic: "Chhatrapati Shivaji Terminus", image: "assets/monument-images/19_CST_Mumbai.jpg" },
         { name: "Sanchi Stupa", capital: "Sanchi", phonetic: "Sanchi Stupa", image: "assets/monument-images/20_Sanchi_Stupa.jpg" },
 
-        { name: "Ellora Caves", capital: "Aurangabad", phonetic: "Ellora Caves", image: "assets/monument-images/21_Ellora_Caves.png" },
+        { name: "Ellora Caves", capital: "Chhatrapati Sambhajinagar", phonetic: "Ellora Caves", image: "assets/monument-images/21_Ellora_Caves.png" },
         { name: "Brihadeeswara Temple", capital: "Thanjavur", phonetic: "Brihadeeswara Temple", image: "assets/monument-images/22_Brihadeeswara_Temple.png" },
         { name: "Khajuraho Temples", capital: "Khajuraho", phonetic: "Khajuraho Temples", image: "assets/monument-images/23_Khajuraho_Temples.png" },
         { name: "Rani ki Vav", capital: "Patan", phonetic: "Rani ki Vav", image: "assets/monument-images/24_Rani_ki_Vav.png" },
