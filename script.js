@@ -8,16 +8,32 @@ const Engine = {
     voice: null,
     historyPushed: false,
 
-    init(mode) {
-        this.mode = mode;
-        this.questions = [...QUIZ_DATA[mode]].sort(() => 0.5 - Math.random());
-        this.score = 0;
-        this.currentIdx = 0;
-        this.initVoices();
-        this.renderGame();
-        this.nextQuestion();
-        this.setupBackButtonHandler();
+    MODE_MAP: {
+        'math': '🧮 Addition',
+        'subtraction': '➖ Subtraction',
+        'states': '🗺️ Indian States',
+        'uts': '📍 Union Territories',
+        'monuments': '🏰 Indian Monuments',
+        'symbols': '🚩 National Symbols',
+        'families': '🦁 Animal Families',
+        'homes': '🏠 Animal Homes'
     },
+
+     init(mode) {
+         this.mode = mode;
+         if (typeof QUIZ_DATA === 'undefined' || !QUIZ_DATA[mode]) {
+             console.error(`Quiz data for mode "${mode}" not found. Please refresh.`);
+             alert(`Quiz data not loaded. Please refresh the page.`);
+             return;
+         }
+         this.questions = [...QUIZ_DATA[mode]].sort(() => 0.5 - Math.random());
+         this.score = 0;
+         this.currentIdx = 0;
+         this.initVoices();
+         this.renderGame();
+         this.nextQuestion();
+         this.setupBackButtonHandler();
+     },
 
     initVoices() {
         const v = this.synth.getVoices();
@@ -46,18 +62,9 @@ const Engine = {
         }, 50);
     },
 
-    renderGame() {
-        const modeMap = {
-            'math': '🧮 Addition',
-            'subtraction': '➖ Subtraction',
-            'states': '🗺️ Indian States',
-            'uts': '📍 Union Territories',
-            'monuments': '🏰 Indian Monuments',
-            'symbols': '🚩 National Symbols',
-            'families': '🦁 Animal Families'
-        };
-        const modeTitle = modeMap[this.mode] || '';
-        document.getElementById('game-container').innerHTML = `
+     renderGame() {
+         const modeTitle = this.MODE_MAP[this.mode] || '';
+         document.getElementById('game-container').innerHTML = `
             <div class="home-btn" onclick="location.reload()">
                 🏠
             </div>
@@ -279,19 +286,10 @@ const Engine = {
          const isFamilies = this.mode === 'families';
          const isHomes = this.mode === 'homes';
 
-         if (choice === correct) {
-            this.score++;
-            const modeMap = { 
-                'math': '🧮 Addition', 
-                'subtraction': '➖ Subtraction', 
-                'states': '🗺️ Indian States', 
-                'uts': '📍 Union Territories', 
-                'monuments': '🏰 Indian Monuments',
-                'symbols': '🚩 National Symbols',
-                'families': '🦁 Animal Families'
-            };
-            const modeTitle = modeMap[this.mode] || '';
-            document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
+          if (choice === correct) {
+             this.score++;
+             const modeTitle = this.MODE_MAP[this.mode] || '';
+             document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
             btn.classList.add('correct');
             this.speak(isMath || isSub ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         } else {
