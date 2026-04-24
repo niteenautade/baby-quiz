@@ -230,12 +230,13 @@ const Engine = {
               document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} What is a baby ${q.name} called?</h3>` +
                   options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
           } else if (isHomes) {
-             document.getElementById('math-equation-area').classList.add('hidden');
-             document.getElementById('counting-zone').classList.add('hidden');
-             document.getElementById('monument-image-area').classList.add('hidden');
-                document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} Where does a ${q.name} live?</h3>` +
-                    options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
-         } else {
+              document.getElementById('math-equation-area').classList.add('hidden');
+              document.getElementById('counting-zone').classList.add('hidden');
+              document.getElementById('monument-image-area').classList.remove('hidden');
+              document.getElementById('monument-image-area').innerHTML = `<h3>${q.name}</h3><img src="${q.image}" class="monument-display" alt="${q.name}">`;
+              document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} Where does a ${q.name} live?</h3>` +
+                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+          } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             const questionText = isMon ? `In which city is ${q.name} located?` : `What is the capital of ${q.name}?`;

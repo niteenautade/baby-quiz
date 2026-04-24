@@ -154,22 +154,22 @@ const QUIZ_DATA = {
        { name: "Bear", capital: "Cub", emoji: "🐻", image: "assets/animal-images/14_Bear_Cub.jpg" },
        { name: "Hen", capital: "Chick", emoji: "🐔", image: "assets/animal-images/15_Hen_Chick.jpg" }
      ],
-    homes: [
-      { name: "Honeybee", capital: "Hive", emoji: "🐝" },
-      { name: "Bird", capital: "Nest", emoji: "🐦" },
-      { name: "Spider", capital: "Web", emoji: "🕷️" },
-      { name: "Lion", capital: "Den", emoji: "🦁" },
-      { name: "Rabbit", capital: "Burrow", emoji: "🐰" },
-      { name: "Ant", capital: "Anthill", emoji: "🐜" },
-      { name: "Dog", capital: "Kennel", emoji: "🐶" },
-      { name: "Horse", capital: "Stable", emoji: "🐴" },
-      { name: "Fish", capital: "Ocean", emoji: "🐟" },
-      { name: "Owl", capital: "Hollow", emoji: "🦉" },
-      { name: "Bat", capital: "Cave", emoji: "🦇" },
-      { name: "Pig", capital: "Sty", emoji: "🐷" },
-      { name: "Hen", capital: "Coop", emoji: "🐔" },
-      { name: "Polar Bear", capital: "Ice Cave", emoji: "🧊" },
-      { name: "Squirrel", capital: "Drey", emoji: "🐿️" }
-    ]
+     homes: [
+       { name: "Honeybee", capital: "Hive", emoji: "🐝", image: "assets/animal-homes/01_Honeybee_Hive.jpg" },
+       { name: "Bird", capital: "Nest", emoji: "🐦", image: "assets/animal-homes/02_Bird_Nest.jpg" },
+       { name: "Spider", capital: "Web", emoji: "🕷️", image: "assets/animal-homes/03_Spider_Web.jpg" },
+       { name: "Lion", capital: "Den", emoji: "🦁", image: "assets/animal-homes/04_Lion_Den.jpg" },
+       { name: "Rabbit", capital: "Burrow", emoji: "🐰", image: "assets/animal-homes/05_Rabbit_Burrow.jpg" },
+       { name: "Ant", capital: "Anthill", emoji: "🐜", image: "assets/animal-homes/06_Ant_Anthill.jpg" },
+       { name: "Dog", capital: "Kennel", emoji: "🐶", image: "assets/animal-homes/07_Dog_Kennel.jpg" },
+       { name: "Horse", capital: "Stable", emoji: "🐴", image: "assets/animal-homes/08_Horse_Stable.jpg" },
+       { name: "Fish", capital: "Ocean", emoji: "🐟", image: "assets/animal-homes/09_Fish_Ocean.jpg" },
+       { name: "Owl", capital: "Hollow", emoji: "🦉", image: "assets/animal-homes/10_Owl_Hollow.jpg" },
+       { name: "Bat", capital: "Cave", emoji: "🦇", image: "assets/animal-homes/11_Bat_Cave.jpg" },
+       { name: "Pig", capital: "Sty", emoji: "🐷", image: "assets/animal-homes/12_Pig_Sty.jpg" },
+       { name: "Hen", capital: "Coop", emoji: "🐔", image: "assets/animal-homes/13_Hen_Coop.jpg" },
+       { name: "Polar Bear", capital: "Ice Cave", emoji: "🧊", image: "assets/animal-homes/14_PolarBear_IceCave.jpg" },
+       { name: "Squirrel", capital: "Drey", emoji: "🐿️", image: "assets/animal-homes/15_Squirrel_Drey.jpg" }
+     ]
 
 };
