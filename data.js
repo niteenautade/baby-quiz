@@ -83,7 +83,7 @@ const QUIZ_DATA = {
         { name: "Ajanta Caves", capital: "Aurangabad", phonetic: "Ajanta Caves", image: "assets/monument-images/14_Ajanta_Caves.jpg" },
         { name: "Meenakshi Temple", capital: "Madurai", phonetic: "Meenakshi Temple", image: "assets/monument-images/15_Meenakshi_Temple.jpg" },
         { name: "Vivekananda Rock", capital: "Kanyakumari", phonetic: "Vivekananda Rock", image: "assets/monument-images/16_Vivekananda_Rock.jpg" },
-        { name: "Gol Gumbaz", capital: "Vijayapura", phonetic: "Gol Gumbaz", image: "assets/monument-images/17_Gol_Gumbaz.jpg" },
+        { name: "Gol Gumbaz", capital: "Bijapur", phonetic: "Gol Gumbaz", image: "assets/monument-images/17_Gol_Gumbaz.jpg" },
         { name: "Jantar Mantar", capital: "Jaipur", phonetic: "Jantar Mantar", image: "assets/monument-images/18_Jantar_Mantar.jpg" },
         { name: "Chhatrapati Shivaji Terminus", capital: "Mumbai", phonetic: "Chhatrapati Shivaji Terminus", image: "assets/monument-images/19_CST_Mumbai.jpg" },
         { name: "Sanchi Stupa", capital: "Sanchi", phonetic: "Sanchi Stupa", image: "assets/monument-images/20_Sanchi_Stupa.jpg" },
