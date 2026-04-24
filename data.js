@@ -152,7 +152,24 @@ const QUIZ_DATA = {
       { name: "Elephant", capital: "Calf", emoji: "🐘" },
       { name: "Frog", capital: "Tadpole", emoji: "🐸" },
       { name: "Bear", capital: "Cub", emoji: "🐻" },
-      { name: "Hen", capital: "Chick", emoji: "🐔" }
+        { name: "Hen", capital: "Chick", emoji: "🐔" }
+    ],
+    homes: [
+      { name: "Honeybee", capital: "Hive", emoji: "🐝" },
+      { name: "Bird", capital: "Nest", emoji: "🐦" },
+      { name: "Spider", capital: "Web", emoji: "🕷️" },
+      { name: "Lion", capital: "Den", emoji: "🦁" },
+      { name: "Rabbit", capital: "Burrow", emoji: "🐰" },
+      { name: "Ant", capital: "Anthill", emoji: "🐜" },
+      { name: "Dog", capital: "Kennel", emoji: "🐶" },
+      { name: "Horse", capital: "Stable", emoji: "🐴" },
+      { name: "Fish", capital: "Ocean", emoji: "🐟" },
+      { name: "Owl", capital: "Hollow", emoji: "🦉" },
+      { name: "Bat", capital: "Cave", emoji: "🦇" },
+      { name: "Pig", capital: "Sty", emoji: "🐷" },
+      { name: "Hen", capital: "Coop", emoji: "🐔" },
+      { name: "Polar Bear", capital: "Ice Cave", emoji: "🧊" },
+      { name: "Squirrel", capital: "Drey", emoji: "🐿️" }
     ]
 
 };
