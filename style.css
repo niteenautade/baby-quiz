@@ -11,6 +11,7 @@ body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-heig
 #game-container {
     background: var(--card); padding: 3vh 5vw; border-radius: 30px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3); width: 85vw; max-width: 500px;
+    max-height: 90vh; overflow-y: auto;
     text-align: center; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1);
     position: relative; transition: opacity 0.3s, transform 0.3s;
 }

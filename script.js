@@ -116,7 +116,7 @@ const Engine = {
             : isSub
             ? [
                 { text: `${q.num1} minus ${q.num2}.` },
-                { text: `If you have ${q.num1} ${q.num1 === 1 ? fruitName : pluralFruit}, and you give ${q.num2} to your friend, how many are left? What is ${q.name}?` },
+                { text: `If you have ${q.num1} ${q.num1 === 1 ? fruitName : pluralFruit}, and you give ${q.num2} to your friend, how many are left? What is ${q.num1} minus ${q.num2}?` },
                 ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
             ]
             : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
