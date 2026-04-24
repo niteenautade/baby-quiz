@@ -6,6 +6,8 @@
 
 body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; color: var(--text); overflow: hidden; }
 
+.hidden { display: none !important; }
+
 #game-container {
     background: var(--card); padding: 3vh 5vw; border-radius: 30px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3); width: 85vw; max-width: 500px;
@@ -13,9 +15,23 @@ body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-heig
     position: relative; transition: opacity 0.3s, transform 0.3s;
 }
 
+#math-equation-area { color: #facc15; font-size: 2rem; margin: 2vh 0; }
+#counting-zone {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin: 2vh 0;
+}
+.emoji-group {
+    display: flex; flex-wrap: wrap; gap: 5px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px;
+}
+.plus-sign { font-size: 2rem; font-weight: bold; color: #facc15; }
+
 .home-btn { position: absolute; top: 20px; left: 20px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.mode-btn { background: rgba(255,255,255,0.1); border: 2px solid var(--accent); padding: 3vh; margin: 1vh 0; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+.mode-btn {
+    background: rgba(255,255,255,0.1); border: 2px solid var(--accent);
+    padding: 3vh; margin: 1vh 0; border-radius: 20px; cursor: pointer; transition: 0.3s;
+}
+.mode-btn h2 { font-size: 1.5rem; transition: transform 0.2s; }
 .mode-btn:hover { transform: scale(1.02); }
+.mode-btn:hover h2 { transform: scale(1.1); display: inline-block; }
 
 button { display: block; width: 100%; padding: 2vh; margin: 1vh 0; border: none; border-radius: 15px; background: rgba(255,255,255,0.05); color: var(--text); font-size: 1.2rem; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
 .highlight-active { transform: scale(1.05); border-color: var(--highlight); box-shadow: 0 0 20px rgba(250,204,21,0.3); }

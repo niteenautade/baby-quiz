@@ -38,5 +38,15 @@ const QUIZ_DATA = {
         { name: "Andaman and Nicobar Islands", capital: "Port Blair", phonetic: "Andaman and Nicobar Islands" },
         { name: "Chandigarh", capital: "Chandigarh", phonetic: "Chandigarh" },
         { name: "Dadra and Nagar Haveli and Daman and Diu", capital: "Daman", phonetic: "Dadra and Nagar Haveli and Daman and Diu" }
-    ]
+    ],
+    math: Array.from({ length: 20 }, (_, i) => {
+        const a = Math.floor(Math.random() * 9) + 1;
+        const b = Math.floor(Math.random() * 9) + 1;
+        return {
+            num1: a,
+            num2: b,
+            capital: (a + b).toString(),
+            name: `${a} + ${b}`
+        };
+    })
 };

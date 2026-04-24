@@ -43,6 +43,8 @@ const Engine = {
             <div id="wave-container">
                 <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
             </div>
+            <div id="math-equation-area" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
+            <div id="counting-zone" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
             <div id="quiz-area"></div>
         `;
     },
@@ -55,6 +57,7 @@ const Engine = {
 
         this.userClicked = false;
         const q = this.questions[this.currentIdx];
+        const isMath = this.mode === 'math';
         const options = [q.capital];
         while (options.length < 4) {
             const rand = QUIZ_DATA[this.mode][Math.floor(Math.random() * QUIZ_DATA[this.mode].length)].capital;
@@ -62,10 +65,35 @@ const Engine = {
         }
         options.sort(() => 0.5 - Math.random());
 
-        document.getElementById('quiz-area').innerHTML = `<h3>What is the capital of ${q.name}?</h3>` +
-            options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)}: ${opt}</button>`).join('');
+        if (isMath) {
+            document.getElementById('quiz-area').innerHTML = '';
+            document.getElementById('math-equation-area').classList.remove('hidden');
+            document.getElementById('counting-zone').classList.remove('hidden');
+            document.getElementById('math-equation-area').innerHTML = `<h3>${q.name} = ?</h3>`;
 
-        const sequence = [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
+            const group1 = Array(q.num1).fill('🍎').join('');
+            const group2 = Array(q.num2).fill('🍎').join('');
+            document.getElementById('counting-zone').innerHTML = `
+                <div class="emoji-group">${group1}</div>
+                <div class="plus-sign">+</div>
+                <div class="emoji-group">${group2}</div>
+            `;
+            document.getElementById('quiz-area').innerHTML = options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+        } else {
+            document.getElementById('math-equation-area').classList.add('hidden');
+            document.getElementById('counting-zone').classList.add('hidden');
+            document.getElementById('quiz-area').innerHTML = `<h3>What is the capital of ${q.name}?</h3>` +
+                options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)}: ${opt}</button>`).join('');
+        }
+
+        const sequence = isMath
+            ? [
+                { text: `If you have ${q.num1} apples.` },
+                { text: `And daddy gives you ${q.num2} more.` },
+                { text: `${q.name} equals what?` },
+                ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+            ]
+            : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
 
         for (const step of sequence) {
             if (this.userClicked) break;
@@ -82,13 +110,17 @@ const Engine = {
 
         if (choice === correct) {
             this.score++;
-            document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
+            const modeTitle = this.mode === 'math' ? '🧮 Addition' : (this.mode === 'states' ? '🗺️ Indian States' : '📍 Union Territories');
+            document.getElementById('score-shield').innerText = `⭐ ${modeTitle} | Score: ${this.score} / ${this.questions.length}`;
             btn.classList.add('correct');
-            this.speak("Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
+            this.speak(this.mode === 'math' ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         } else {
             btn.classList.add('wrong');
             document.querySelectorAll('button').forEach(b => { if(b.innerText.includes(correct)) b.classList.add('correct-reveal'); });
-            this.speak(`Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
+            const msg = this.mode === 'math'
+                ? `Not quite! ${this.questions[this.currentIdx].name} is ${correct}.`
+                : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
+            this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         }
     },
 
