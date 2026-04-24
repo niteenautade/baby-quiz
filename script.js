@@ -26,8 +26,7 @@ const Engine = {
         document.getElementById('wave-container')?.classList.add('speaking');
         this.synth.cancel();
         setTimeout(() => {
-            const cleanText = text.replace(/-/g, ' minus ');
-            const utter = new SpeechSynthesisUtterance(cleanText);
+            const utter = new SpeechSynthesisUtterance(text);
             utter.voice = this.voice;
             utter.rate = 0.85;
             utter.onend = () => { document.getElementById('wave-container')?.classList.remove('speaking'); if(callback) callback(); };
@@ -135,18 +134,21 @@ const Engine = {
         this.userClicked = true;
         this.synth.cancel();
 
+        const isMath = this.mode === 'math';
+        const isSub = this.mode === 'subtraction';
+
         if (choice === correct) {
             this.score++;
-            const modeTitle = this.mode === 'math' ? '🧮 Addition' : (this.mode === 'subtraction' ? '➖ Subtraction' : (this.mode === 'states' ? '🗺️ Indian States' : '📍 Union Territories'));
+            const modeTitle = isMath ? '🧮 Addition' : (isSub ? '➖ Subtraction' : (this.mode === 'states' ? '🗺️ Indian States' : '📍 Union Territories'));
             document.getElementById('score-shield').innerText = `⭐ ${modeTitle} | Score: ${this.score} / ${this.questions.length}`;
             btn.classList.add('correct');
-            this.speak(this.mode === 'math' ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
+            this.speak(isMath || isSub ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         } else {
             btn.classList.add('wrong');
             document.querySelectorAll('button').forEach(b => { if(b.innerText.includes(correct)) b.classList.add('correct-reveal'); });
-            const msg = this.mode === 'math'
+            const msg = isMath
                 ? `Not quite! ${this.questions[this.currentIdx].name} is ${correct}.`
-                : this.mode === 'subtraction'
+                : isSub
                 ? `Not quite! ${this.questions[this.currentIdx].num1} minus ${this.questions[this.currentIdx].num2} is ${correct}.`
                 : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
             this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
