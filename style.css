@@ -47,11 +47,21 @@ body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-heig
 
 
 .home-btn { position: absolute; top: 20px; left: 20px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+#quiz-area p { margin-bottom: 2vh; }
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5vh;
+}
+
 .mode-btn {
     background: rgba(255,255,255,0.1); border: 2px solid var(--accent);
-    padding: 3vh; margin: 1vh 0; border-radius: 20px; cursor: pointer; transition: 0.3s;
+    padding: 2vh 1vh; margin: 0; border-radius: 20px; cursor: pointer; transition: 0.3s;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-.mode-btn h2 { font-size: 1.5rem; transition: transform 0.2s; }
+.mode-btn h2 { font-size: 1.1rem; transition: transform 0.2s; margin: 0 0 0.5vh 0; }
+.mode-btn p { font-size: 0.9rem; opacity: 0.8; margin: 0; }
 .mode-btn:hover { transform: scale(1.02); }
 .mode-btn:hover h2 { transform: scale(1.1); display: inline-block; }
 

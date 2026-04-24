@@ -13,11 +13,13 @@
     <div id="quiz-area">
         <h1>Baby Quiz</h1>
         <p>Choose your quiz:</p>
-        <div onclick="Engine.init('states')" class="mode-btn"><h2>🗺️ Indian States</h2><p>28 Questions</p></div>
-        <div onclick="Engine.init('uts')" class="mode-btn"><h2>📍 Union Territories</h2><p>8 Questions</p></div>
-        <div onclick="Engine.init('math')" class="mode-btn"><h2>🧮 Addition</h2><p>20 Questions</p></div>
-        <div onclick="Engine.init('subtraction')" class="mode-btn"><h2>➖ Subtraction</h2><p>20 Questions</p></div>
-        <div onclick="Engine.init('monuments')" class="mode-btn"><h2>🏰 Indian Monuments</h2><p>20 Questions</p></div>
+        <div class="menu-grid">
+            <div onclick="Engine.init('states')" class="mode-btn"><h2>🗺️ Indian States</h2><p>28 Questions</p></div>
+            <div onclick="Engine.init('uts')" class="mode-btn"><h2>📍 Union Territories</h2><p>8 Questions</p></div>
+            <div onclick="Engine.init('math')" class="mode-btn"><h2>🧮 Addition</h2><p>20 Questions</p></div>
+            <div onclick="Engine.init('subtraction')" class="mode-btn"><h2>➖ Subtraction</h2><p>20 Questions</p></div>
+            <div onclick="Engine.init('monuments')" class="mode-btn"><h2>🏰 Indian Monuments</h2><p>20 Questions</p></div>
+        </div>
     </div>
     <div id="math-equation-area" class="hidden"></div>
     <div id="counting-zone" class="hidden"></div>
