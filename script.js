@@ -60,7 +60,7 @@ const Engine = {
             <div class="home-btn" onclick="location.reload()">
                 🏠
             </div>
-            <div id="score-shield">${modeTitle} ⭐ Score: 0 / ${this.questions.length}</div>
+            <div id="score-shield">⭐ Score: 0 / ${this.questions.length}</div>
             <div id="wave-container">
                 <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
             </div>
