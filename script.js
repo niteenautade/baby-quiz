@@ -58,6 +58,7 @@ const Engine = {
         this.userClicked = false;
         const q = this.questions[this.currentIdx];
         const isMath = this.mode === 'math';
+        const isSub = this.mode === 'subtraction';
         const options = [q.capital];
         while (options.length < 4) {
             const rand = QUIZ_DATA[this.mode][Math.floor(Math.random() * QUIZ_DATA[this.mode].length)].capital;
@@ -65,19 +66,35 @@ const Engine = {
         }
         options.sort(() => 0.5 - Math.random());
 
-        if (isMath) {
+        if (isMath || isSub) {
             document.getElementById('quiz-area').innerHTML = '';
             document.getElementById('math-equation-area').classList.remove('hidden');
             document.getElementById('counting-zone').classList.remove('hidden');
             document.getElementById('math-equation-area').innerHTML = `<h3>${q.name} = ?</h3>`;
 
-            const group1 = Array(q.num1).fill('🍎').join('');
-            const group2 = Array(q.num2).fill('🍎').join('');
-            document.getElementById('counting-zone').innerHTML = `
-                <div class="emoji-group">${group1}</div>
-                <div class="plus-sign">+</div>
-                <div class="emoji-group">${group2}</div>
-            `;
+            if (isMath) {
+                const group1 = Array(q.num1).fill('🍎').join('');
+                const group2 = Array(q.num2).fill('🍎').join('');
+                document.getElementById('counting-zone').innerHTML = `
+                    <div class="emoji-group">${group1}</div>
+                    <div class="math-symbol">+</div>
+                    <div class="emoji-group">${group2}</div>
+                `;
+            } else {
+                const group1 = Array(q.num1).fill('🍎').join('');
+                const group2 = Array(q.num2).fill('🍎').join('');
+                const resultEmojis = Array(q.num1).fill('🍎').map((e, idx) =>
+                    `<span class="${idx >= (q.num1 - q.num2) ? 'strikethrough' : ''}">${e}</span>`
+                ).join('');
+
+                document.getElementById('counting-zone').innerHTML = `
+                    <div class="emoji-group">${group1}</div>
+                    <div class="math-symbol">-</div>
+                    <div class="emoji-group">${group2}</div>
+                    <div class="math-symbol">=</div>
+                    <div class="emoji-group">${resultEmojis}</div>
+                `;
+            }
             document.getElementById('quiz-area').innerHTML = options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
         } else {
             document.getElementById('math-equation-area').classList.add('hidden');
@@ -91,6 +108,12 @@ const Engine = {
                 { text: `If you have ${q.num1} apples.` },
                 { text: `And daddy gives you ${q.num2} more.` },
                 { text: `${q.name} equals what?` },
+                ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+            ]
+            : isSub
+            ? [
+                { text: `${q.num1} minus ${q.num2}.` },
+                { text: `If you have ${q.num1} apples, and you give ${q.num2} to your friend, how many are left? What is ${q.name}?` },
                 ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
             ]
             : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
@@ -119,6 +142,8 @@ const Engine = {
             document.querySelectorAll('button').forEach(b => { if(b.innerText.includes(correct)) b.classList.add('correct-reveal'); });
             const msg = this.mode === 'math'
                 ? `Not quite! ${this.questions[this.currentIdx].name} is ${correct}.`
+                : this.mode === 'subtraction'
+                ? `Not quite! ${this.questions[this.currentIdx].name} leaves ${correct}.`
                 : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
             this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         }

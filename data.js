@@ -48,5 +48,15 @@ const QUIZ_DATA = {
             capital: (a + b).toString(),
             name: `${a} + ${b}`
         };
+    }),
+    subtraction: Array.from({ length: 10 }, (_, i) => {
+        const a = Math.floor(Math.random() * 9) + 1;
+        const b = Math.floor(Math.random() * a) + 1;
+        return {
+            num1: a,
+            num2: b,
+            capital: (a - b).toString(),
+            name: `${a} - ${b}`
+        };
     })
 };
