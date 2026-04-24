@@ -36,7 +36,7 @@ const Engine = {
 
     renderGame() {
         document.getElementById('game-container').innerHTML = `
-            <div class="home-btn" onclick="Engine.showModal()">
+            <div class="home-btn" onclick="location.reload()">
                 🏠
             </div>
             <div id="score-shield">⭐ Score: 0 / ${this.questions.length}</div>
@@ -45,6 +45,7 @@ const Engine = {
             </div>
             <div id="math-equation-area" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
             <div id="counting-zone" class="${this.mode === 'math' ? '' : 'hidden'}"></div>
+            <div id="monument-image-area" class="${this.mode === 'monuments' ? '' : 'hidden'}"></div>
             <div id="quiz-area"></div>
         `;
     },
@@ -59,15 +60,26 @@ const Engine = {
         const q = this.questions[this.currentIdx];
         const isMath = this.mode === 'math';
         const isSub = this.mode === 'subtraction';
+        const isMon = this.mode === 'monuments';
+
         const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
         const fruitName = fruitMap[q.fruit] || 'fruit';
         const pluralFruit = fruitName + 's';
+
         const options = [q.capital];
         while (options.length < 4) {
             const rand = QUIZ_DATA[this.mode][Math.floor(Math.random() * QUIZ_DATA[this.mode].length)].capital;
             if (!options.includes(rand)) options.push(rand);
         }
         options.sort(() => 0.5 - Math.random());
+
+        document.getElementById('monument-image-area').innerHTML = '';
+        if (isMon) {
+            document.getElementById('monument-image-area').innerHTML = `
+                <h3>${q.name}</h3>
+                <img src="${q.image}" class="monument-display" alt="${q.name}">
+            `;
+        }
 
         if (isMath || isSub) {
             document.getElementById('quiz-area').innerHTML = '';
@@ -102,8 +114,9 @@ const Engine = {
         } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
-            document.getElementById('quiz-area').innerHTML = `<h3>What is the capital of ${q.name}?</h3>` +
-                options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)}: ${opt}</button>`).join('');
+            const questionText = isMon ? `In which city is ${q.name} located?` : `What is the capital of ${q.name}?`;
+            document.getElementById('quiz-area').innerHTML = `<h3>${questionText}</h3>` +
+                options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${isMon ? opt : String.fromCharCode(65+i)+': '+opt}</button>`).join('');
         }
 
         const sequence = isMath
@@ -117,6 +130,11 @@ const Engine = {
             ? [
                 { text: `${q.num1} minus ${q.num2}.` },
                 { text: `If you have ${q.num1} ${q.num1 === 1 ? fruitName : pluralFruit}, and you give ${q.num2} to your friend, how many are left? What is ${q.num1} minus ${q.num2}?` },
+                ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+            ]
+            : isMon
+            ? [
+                { text: `In which city is the ${q.phonetic} located?` },
                 ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
             ]
             : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
@@ -136,10 +154,12 @@ const Engine = {
 
         const isMath = this.mode === 'math';
         const isSub = this.mode === 'subtraction';
+        const isMon = this.mode === 'monuments';
 
         if (choice === correct) {
             this.score++;
-            const modeTitle = isMath ? '🧮 Addition' : (isSub ? '➖ Subtraction' : (this.mode === 'states' ? '🗺️ Indian States' : '📍 Union Territories'));
+            const modeMap = { 'math': '🧮 Addition', 'subtraction': '➖ Subtraction', 'states': '🗺️ Indian States', 'uts': '📍 Union Territories', 'monuments': '🏰 Indian Monuments' };
+            const modeTitle = modeMap[this.mode] || '';
             document.getElementById('score-shield').innerText = `⭐ ${modeTitle} | Score: ${this.score} / ${this.questions.length}`;
             btn.classList.add('correct');
             this.speak(isMath || isSub ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
@@ -150,15 +170,17 @@ const Engine = {
                 ? `Not quite! ${this.questions[this.currentIdx].name} is ${correct}.`
                 : isSub
                 ? `Not quite! ${this.questions[this.currentIdx].num1} minus ${this.questions[this.currentIdx].num2} is ${correct}.`
+                : isMon
+                ? `Oops! The ${this.questions[this.currentIdx].name} is actually in ${correct}.`
                 : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
             this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         }
     },
 
-    showModal() { document.getElementById('modal-overlay').style.display = 'flex'; },
+
+    showModal() { location.reload(); },
     confirmExit(exit) {
-        document.getElementById('modal-overlay').style.display = 'none';
-        if (exit) { this.synth.cancel(); location.reload(); }
+        location.reload();
     },
 
     showResults() {

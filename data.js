@@ -65,5 +65,27 @@ const QUIZ_DATA = {
             name: `${a} - ${b}`,
             fruit: fruit
         };
-    })
+    }),
+    monuments: [
+        { name: "Taj Mahal", capital: "Agra", phonetic: "Taj Mahal", image: "assets/monument-images/01_Taj_Mahal.jpg" },
+        { name: "Hawa Mahal", capital: "Jaipur", phonetic: "Hawa Mahal", image: "assets/monument-images/02_Hawa_Mahal.jpg" },
+        { name: "Gateway of India", capital: "Mumbai", phonetic: "Gateway of India", image: "assets/monument-images/03_Gateway_of_India.jpg" },
+        { name: "Golden Temple", capital: "Amritsar", phonetic: "Golden Temple", image: "assets/monument-images/04_Golden_Temple.jpg" },
+        { name: "Qutub Minar", capital: "Delhi", phonetic: "Qutub Minar", image: "assets/monument-images/05_Qutub_Minar.jpg" },
+        { name: "Charminar", capital: "Hyderabad", phonetic: "Charminar", image: "assets/monument-images/06_Charminar.jpg" },
+        { name: "Victoria Memorial", capital: "Kolkata", phonetic: "Victoria Memorial", image: "assets/monument-images/07_Victoria_Memorial.jpg" },
+        { name: "Amer Fort", capital: "Jaipur", phonetic: "Amer Fort", image: "assets/monument-images/08_Amer_Fort.jpg" },
+        { name: "Lotus Temple", capital: "Delhi", phonetic: "Lotus Temple", image: "assets/monument-images/09_Lotus_Temple.jpg" },
+        { name: "Red Fort", capital: "Delhi", phonetic: "Red Fort", image: "assets/monument-images/10_Red_Fort.jpg" },
+        { name: "India Gate", capital: "Delhi", phonetic: "India Gate", image: "assets/monument-images/11_India_Gate.jpg" },
+        { name: "Mysore Palace", capital: "Mysuru", phonetic: "Mysore Palace", image: "assets/monument-images/12_Mysore_Palace.jpg" },
+        { name: "Konark Sun Temple", capital: "Konark", phonetic: "Konark Sun Temple", image: "assets/monument-images/13_Konark_Sun_Temple.jpg" },
+        { name: "Ajanta Caves", capital: "Aurangabad", phonetic: "Ajanta Caves", image: "assets/monument-images/14_Ajanta_Caves.jpg" },
+        { name: "Meenakshi Temple", capital: "Madurai", phonetic: "Meenakshi Temple", image: "assets/monument-images/15_Meenakshi_Temple.jpg" },
+        { name: "Vivekananda Rock", capital: "Kanyakumari", phonetic: "Vivekananda Rock", image: "assets/monument-images/16_Vivekananda_Rock.jpg" },
+        { name: "Gol Gumbaz", capital: "Vijayapura", phonetic: "Gol Gumbaz", image: "assets/monument-images/17_Gol_Gumbaz.jpg" },
+        { name: "Jantar Mantar", capital: "Jaipur", phonetic: "Jantar Mantar", image: "assets/monument-images/18_Jantar_Mantar.jpg" },
+        { name: "Chhatrapati Shivaji Terminus", capital: "Mumbai", phonetic: "Chhatrapati Shivaji Terminus", image: "assets/monument-images/19_CST_Mumbai.jpg" },
+        { name: "Sanchi Stupa", capital: "Sanchi", phonetic: "Sanchi Stupa", image: "assets/monument-images/20_Sanchi_Stupa.jpg" }
+    ]
 };
