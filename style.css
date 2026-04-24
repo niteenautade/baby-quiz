@@ -79,7 +79,7 @@ body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-heig
 .mode-btn:hover { transform: scale(1.02); }
 .mode-btn:hover h2 { transform: scale(1.1); display: inline-block; }
 
-button { display: block; width: 100%; padding: 2vh; margin: 1vh 0; border: none; border-radius: 15px; background: rgba(255,255,255,0.05); color: var(--text); font-size: 1.2rem; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
+button { display: block; width: 100%; padding: 1vh 1.5vh; margin: 0.5vh 0; border: none; border-radius: 12px; background: rgba(255,255,255,0.05); color: var(--text); font-size: 1.1rem; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
 .highlight-active { transform: scale(1.05); border-color: var(--highlight); box-shadow: 0 0 20px rgba(250,204,21,0.3); }
 .correct { background: var(--success) !important; color: white; }
 .wrong { background: var(--error) !important; color: white; }
