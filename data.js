@@ -119,5 +119,23 @@ const QUIZ_DATA = {
         { name: "Udayagiri Caves", capital: "Vidisha", phonetic: "Udayagiri Caves", image: "assets/monument-images/49_Udayagiri_Caves.png" },
         { name: "Barabar Caves", capital: "Jehanabad", phonetic: "Barabar Caves", image: "assets/monument-images/50_Barabar_Caves.png" }
 
+    ],
+    symbols: [
+      { name: "National Animal", capital: "Tiger", category: "animal", emoji: "🐅" },
+      { name: "National Bird", capital: "Peacock", category: "bird", emoji: "🦚" },
+      { name: "National Fruit", capital: "Mango", category: "fruit", emoji: "🥭" },
+      { name: "National Flower", capital: "Lotus", category: "flower", emoji: "🪷" },
+      { name: "National Tree", capital: "Banyan Tree", category: "tree", emoji: "🌳" },
+      { name: "National River", capital: "Ganga", category: "river", emoji: "🌊" },
+      { name: "National Aquatic Animal", capital: "Dolphin", category: "aquatic animal", emoji: "🐬" },
+      { name: "National Heritage Animal", capital: "Elephant", category: "heritage animal", emoji: "🐘" },
+      { name: "National Game", capital: "Hockey", category: "game", emoji: "🏑" },
+      { name: "National Motto", capital: "Satyameva Jayate", category: "motto", emoji: "🇮🇳" },
+      { name: "National Reptile", capital: "King Cobra", category: "reptile", emoji: "🐍" },
+      { name: "National Microbe", capital: "Lactobacillus", category: "microbe", emoji: "🥛" },
+      { name: "National Vegetable", capital: "Pumpkin", category: "vegetable", emoji: "🎃" },
+      { name: "National Song", capital: "Vande Mataram", category: "song", emoji: "🎶" },
+      { name: "National Anthem", capital: "Jana Gana Mana", category: "anthem", emoji: "🎵" }
     ]
+
 };

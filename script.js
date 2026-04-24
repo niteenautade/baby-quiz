@@ -47,11 +47,20 @@ const Engine = {
     },
 
     renderGame() {
+        const modeMap = { 
+            'math': '🧮 Addition', 
+            'subtraction': '➖ Subtraction', 
+            'states': '🗺️ Indian States', 
+            'uts': '📍 Union Territories', 
+            'monuments': '🏰 Indian Monuments',
+            'symbols': '🚩 National Symbols'
+        };
+        const modeTitle = modeMap[this.mode] || '';
         document.getElementById('game-container').innerHTML = `
             <div class="home-btn" onclick="location.reload()">
                 🏠
             </div>
-            <div id="score-shield">⭐ Score: 0 / ${this.questions.length}</div>
+            <div id="score-shield">${modeTitle} ⭐ Score: 0 / ${this.questions.length}</div>
             <div id="wave-container">
                 <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
             </div>
@@ -62,7 +71,7 @@ const Engine = {
         `;
     },
 
-    async nextQuestion() {
+     async nextQuestion() {
         if (this.currentIdx >= this.questions.length) {
             this.showResults();
             return;
@@ -73,18 +82,74 @@ const Engine = {
         const isMath = this.mode === 'math';
         const isSub = this.mode === 'subtraction';
         const isMon = this.mode === 'monuments';
+        const isSymbols = this.mode === 'symbols';
 
         const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
         const fruitName = fruitMap[q.fruit] || 'fruit';
         const pluralFruit = fruitName + 's';
 
-        const options = [q.capital];
-        while (options.length < 4) {
-            const rand = QUIZ_DATA[this.mode][Math.floor(Math.random() * QUIZ_DATA[this.mode].length)].capital;
-            if (!options.includes(rand)) options.push(rand);
+        // Generate options with smart distractor logic for symbols
+        let options;
+        if (isSymbols) {
+            const category = q.category;
+            const sameCategoryItems = QUIZ_DATA.symbols.filter(item => 
+                item.capital !== q.capital && item.category === category
+            );
+            
+            const fallbackDistractors = {
+                flower: ["Rose", "Jasmine", "Marigold", "Sunflower"],
+                animal: ["Lion", "Leopard", "Rhino", "Cheetah"],
+                bird: ["Sparrow", "Eagle", "Parrot", "Swan"],
+                fruit: ["Apple", "Banana", "Orange", "Grapes"],
+                tree: ["Neem", "Peepal", "Sandalwood", "Sal"],
+                river: ["Yamuna", "Godavari", "Brahmaputra", "Krishna"],
+                'aquatic animal': ["Whale", "Shark", "Octopus", "Whale Shark"],
+                'heritage animal': ["Lion", "Leopard", "Rhino", "Cheetah"],
+                game: ["Cricket", "Football", "Kabaddi", "Badminton"],
+                motto: ["Truth Alone Triumphs", "Liberty, Equality, Fraternity", "Satyam Shivam Sundaram"],
+                reptile: ["Crocodile", "Lizard", "Tortoise", "Chameleon"],
+                microbe: ["Bacteria", "Virus", "Fungus", "Amoeba"],
+                vegetable: ["Carrot", "Potato", "Tomato", "Spinach"],
+                song: ["Mile Sur Mera Tumhara", "Saare Jahan Se Achcha", "Vande Mataram"],
+                anthem: ["Mile Sur Mera Tumhara", "Saare Jahan Se Achcha", "Vande Mataram"]
+            };
+            
+            let distractors = [];
+            if (sameCategoryItems.length > 0) {
+                const shuffled = sameCategoryItems.sort(() => 0.5 - Math.random());
+                distractors = shuffled.slice(0, Math.min(3, sameCategoryItems.length)).map(item => item.capital);
+            }
+            
+            if (distractors.length < 3) {
+                const fallbackList = fallbackDistractors[category] || [];
+                const filteredFallback = fallbackList
+                    .filter(item => !distractors.includes(item) && item !== q.capital)
+                    .sort(() => 0.5 - Math.random());
+                distractors = distractors.concat(filteredFallback.slice(0, 3 - distractors.length));
+            }
+            
+            let attempts = 0;
+            while (distractors.length < 3 && attempts < 10) {
+                const generic = ["India", "Bharat", "Hindustan", "Bharat Mata"];
+                const randomGen = generic[Math.floor(Math.random() * generic.length)];
+                if (!distractors.includes(randomGen) && randomGen !== q.capital) {
+                    distractors.push(randomGen);
+                }
+                attempts++;
+            }
+            
+            options = [q.capital, ...distractors.slice(0, 3)].sort(() => 0.5 - Math.random());
+        } else {
+            // Standard option generation for other modes
+            options = [q.capital];
+            while (options.length < 4) {
+                const rand = QUIZ_DATA[this.mode][Math.floor(Math.random() * QUIZ_DATA[this.mode].length)].capital;
+                if (!options.includes(rand)) options.push(rand);
+            }
+            options.sort(() => 0.5 - Math.random());
         }
-        options.sort(() => 0.5 - Math.random());
 
+        // Render UI
         document.getElementById('monument-image-area').innerHTML = '';
         if (isMon) {
             document.getElementById('monument-image-area').innerHTML = `
@@ -123,6 +188,11 @@ const Engine = {
                 `;
             }
             document.getElementById('quiz-area').innerHTML = options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+        } else if (isSymbols) {
+            document.getElementById('math-equation-area').classList.add('hidden');
+            document.getElementById('counting-zone').classList.add('hidden');
+            document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} ${q.name}</h3>` +
+                options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)+': '+opt}</button>`).join('');
         } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
@@ -131,6 +201,7 @@ const Engine = {
                 options.map((opt, i) => `<button id="opt-${i}" onclick="Engine.check('${opt}', '${q.capital}', this)">${isMon ? opt : String.fromCharCode(65+i)+': '+opt}</button>`).join('');
         }
 
+        // Build speech sequence
         const sequence = isMath
             ? [
                 { text: `If you have ${q.num1} ${q.num1 === 1 ? fruitName : pluralFruit}.` },
@@ -148,6 +219,11 @@ const Engine = {
             ? [
                 { text: `In which city is the ${q.phonetic} located?` },
                 ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+            ]
+            : isSymbols
+            ? [
+                { text: `What is the ${q.name} of India?` },
+                ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))
             ]
             : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `Option ${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))];
 
@@ -167,10 +243,18 @@ const Engine = {
         const isMath = this.mode === 'math';
         const isSub = this.mode === 'subtraction';
         const isMon = this.mode === 'monuments';
+        const isSymbols = this.mode === 'symbols';
 
         if (choice === correct) {
             this.score++;
-            const modeMap = { 'math': '🧮 Addition', 'subtraction': '➖ Subtraction', 'states': '🗺️ Indian States', 'uts': '📍 Union Territories', 'monuments': '🏰 Indian Monuments' };
+            const modeMap = { 
+                'math': '🧮 Addition', 
+                'subtraction': '➖ Subtraction', 
+                'states': '🗺️ Indian States', 
+                'uts': '📍 Union Territories', 
+                'monuments': '🏰 Indian Monuments',
+                'symbols': '🚩 National Symbols'
+            };
             const modeTitle = modeMap[this.mode] || '';
             document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
             btn.classList.add('correct');
@@ -184,6 +268,8 @@ const Engine = {
                 ? `Not quite! ${this.questions[this.currentIdx].num1} minus ${this.questions[this.currentIdx].num2} is ${correct}.`
                 : isMon
                 ? `Oops! The ${this.questions[this.currentIdx].name} is actually in ${correct}.`
+                : isSymbols
+                ? `Not quite! The ${this.questions[this.currentIdx].name} of India is ${correct}.`
                 : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
             this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         }
