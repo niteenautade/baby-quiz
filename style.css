@@ -1,0 +1,32 @@
+:root {
+    --bg: #0f172a; --card: rgba(30, 41, 59, 0.7);
+    --accent: #6366f1; --highlight: #facc15;
+    --success: #22c55e; --error: #ef4444; --text: #f8fafc;
+}
+
+body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; color: var(--text); overflow: hidden; }
+
+#game-container {
+    background: var(--card); padding: 3vh 5vw; border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3); width: 85vw; max-width: 500px;
+    text-align: center; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1);
+    position: relative; transition: opacity 0.3s, transform 0.3s;
+}
+
+.home-btn { position: absolute; top: 20px; left: 20px; z-index: 100; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.mode-btn { background: rgba(255,255,255,0.1); border: 2px solid var(--accent); padding: 3vh; margin: 1vh 0; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+.mode-btn:hover { transform: scale(1.02); }
+
+button { display: block; width: 100%; padding: 2vh; margin: 1vh 0; border: none; border-radius: 15px; background: rgba(255,255,255,0.05); color: var(--text); font-size: 1.2rem; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
+.highlight-active { transform: scale(1.05); border-color: var(--highlight); box-shadow: 0 0 20px rgba(250,204,21,0.3); }
+.correct { background: var(--success) !important; color: white; }
+.wrong { background: var(--error) !important; color: white; }
+.correct-reveal { border-color: var(--success); }
+
+#modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; }
+.modal { background: #1e293b; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid var(--accent); }
+
+#wave-container { display: flex; justify-content: center; align-items: center; gap: 4px; height: 50px; margin: 1vh 0; }
+.bar { width: 6px; height: 10px; background: var(--accent); border-radius: 3px; }
+.speaking .bar { animation: wave 1s infinite ease-in-out; }
+@keyframes wave { 0%, 100% { height: 10px; } 50% { height: 40px; } }

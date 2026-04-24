@@ -5,51 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Indian Capitals Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0f172a; --card: rgba(30, 41, 59, 0.7);
-            --accent: #6366f1; --highlight: #facc15;
-            --success: #22c55e; --error: #ef4444; --text: #f8fafc;
-        }
-
-        body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; color: var(--text); overflow: hidden; }
-
-        #game-container {
-            background: var(--card); padding: 3vh 5vw; border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); width: 85vw; max-width: 500px;
-            text-align: center; backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1);
-            position: relative; transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .home-btn {
-            position: absolute; top: 20px; left: 20px; z-index: 100;
-            width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2); cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s;
-        }
-        .home-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.2); }
-        .home-btn svg { width: 24px; height: 24px; fill: white; }
-
-        #modal-overlay {
-            position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal { background: #1e293b; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid var(--accent); }
-
-        .mode-btn { background: rgba(255,255,255,0.1); border: 2px solid var(--accent); padding: 3vh; margin: 1vh 0; border-radius: 20px; cursor: pointer; transition: all 0.3s; }
-        .mode-btn:hover { transform: scale(1.02); }
-
-        button { display: block; width: 100%; padding: 2vh; margin: 1vh 0; border: none; border-radius: 15px; background: rgba(255,255,255,0.05); color: var(--text); font-size: 1.2rem; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; }
-        .highlight-active { transform: scale(1.05); border-color: var(--highlight); }
-        .correct { background: var(--success) !important; color: white; }
-        .wrong { background: var(--error) !important; color: white; }
-        .correct-reveal { border-color: var(--success); }
-
-        #wave-container { display: flex; justify-content: center; align-items: center; gap: 4px; height: 50px; margin: 1vh 0; }
-        .bar { width: 6px; height: 10px; background: var(--accent); border-radius: 3px; }
-        .speaking .bar { animation: wave 1s infinite ease-in-out; }
-        @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 40px; } }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -57,8 +13,8 @@
     <div id="quiz-area">
         <h1>Indian Capitals</h1>
         <p>Choose your mission:</p>
-        <div onclick="initQuiz('states')" class="mode-btn"><h2>Indian States</h2><p>28 Questions</p></div>
-        <div onclick="initQuiz('uts')" class="mode-btn"><h2>Union Territories</h2><p>8 Questions</p></div>
+        <div onclick="Engine.init('states')" class="mode-btn"><h2>Indian States</h2><p>28 Questions</p></div>
+        <div onclick="Engine.init('uts')" class="mode-btn"><h2>Union Territories</h2><p>8 Questions</p></div>
     </div>
 </div>
 
@@ -66,136 +22,12 @@
     <div class="modal">
         <h3>Go back to the main menu?</h3>
         <p>You will lose your current score!</p>
-        <button style="background: var(--error);" onclick="closeModal(true)">Yes, Exit</button>
-        <button style="background: var(--success);" onclick="closeModal(false)">No, Stay</button>
+        <button style="background: var(--error);" onclick="Engine.confirmExit(true)">Yes, Exit</button>
+        <button style="background: var(--success);" onclick="Engine.confirmExit(false)">No, Stay</button>
     </div>
 </div>
 
-<script>
-    const data = [
-        { state: "Andhra Pradesh", capital: "Amaravati", type: "state" }, { state: "Arunachal Pradesh", capital: "Itanagar", type: "state" },
-        { state: "Assam", capital: "Dispur", type: "state" }, { state: "Bihar", capital: "Patna", type: "state" },
-        { state: "Chhattisgarh", capital: "Raipur", type: "state" }, { state: "Goa", capital: "Panaji", type: "state" },
-        { state: "Gujarat", capital: "Gandhinagar", type: "state" }, { state: "Haryana", capital: "Chandigarh", type: "state" },
-        { state: "Himachal Pradesh", capital: "Shimla", type: "state" }, { state: "Jharkhand", capital: "Ranchi", type: "state" },
-        { state: "Karnataka", capital: "Bengaluru", type: "state" }, { state: "Kerala", capital: "Thiruvananthapuram", type: "state" },
-        { state: "Madhya Pradesh", capital: "Bhopal", type: "state" }, { state: "Maharashtra", capital: "Mumbai", type: "state" },
-        { state: "Manipur", capital: "Imphal", type: "state" }, { state: "Meghalaya", capital: "Shillong", type: "state" },
-        { state: "Mizoram", capital: "Aizawl", type: "state" }, { state: "Nagaland", capital: "Kohima", type: "state" },
-        { state: "Odisha", capital: "Bhubaneswar", type: "state" }, { state: "Punjab", capital: "Chandigarh", type: "state" },
-        { state: "Rajasthan", capital: "Jaipur", type: "state" }, { state: "Sikkim", capital: "Gangtok", type: "state" },
-        { state: "Tamil Nadu", capital: "Chennai", type: "state" }, { state: "Telangana", capital: "Hyderabad", type: "state" },
-        { state: "Tripura", capital: "Agartala", type: "state" }, { state: "Uttarakhand", capital: "Dehradun", type: "state" },
-        { state: "Uttar Pradesh", capital: "Lucknow", type: "state" }, { state: "West Bengal", capital: "Kolkata", type: "state" },
-        { state: "Delhi", capital: "New Delhi", type: "ut" }, { state: "Jammu and Kashmir", capital: "Srinagar", type: "ut" },
-        { state: "Ladakh", capital: "Leh", type: "ut" }, { state: "Lakshadweep", capital: "Kavaratti", type: "ut" },
-        { state: "Puducherry", capital: "Puducherry", type: "ut" }, { state: "Andaman and Nicobar Islands", capital: "Port Blair", type: "ut" },
-        { state: "Chandigarh", capital: "Chandigarh", type: "ut" }, { state: "Dadra and Nagar Haveli and Daman and Diu", capital: "Daman", type: "ut" }
-    ];
-
-    const pronunciationMap = { "Thiruvananthapuram": "Thiru-vanan-tha-puram", "Bhubaneswar": "Bhu-ba-nesh-war", "Chhattisgarh": "Chhat-tees-garh", "Gandhinagar": "Gandhi-nagar" };
-
-    let synth = window.speechSynthesis, voice = null, currentQuestion = 0, score = 0, questions = [], mode = '', state = { isProcessing: false, userClicked: false };
-
-    function initVoices() {
-        const voices = synth.getVoices();
-        voice = voices.find(v => v.lang === 'en-IN') || voices.find(v => v.lang.startsWith('en')) || voices[0];
-    }
-    synth.onvoiceschanged = initVoices;
-    initVoices();
-
-    function speak(text, callback) {
-        document.getElementById('wave-container')?.classList.add('speaking');
-        synth.cancel();
-        setTimeout(() => {
-            const utter = new SpeechSynthesisUtterance(text);
-            utter.voice = voice;
-            utter.rate = 0.85;
-            utter.onend = () => { document.getElementById('wave-container')?.classList.remove('speaking'); if(callback) callback(); };
-            synth.speak(utter);
-        }, 50);
-    }
-
-    function initQuiz(m) {
-        mode = m;
-        questions = data.filter(d => d.type === (mode === 'states' ? 'state' : 'ut'));
-        score = 0; currentQuestion = 0;
-        renderQuiz();
-    }
-
-    function renderQuiz() {
-        const container = document.getElementById('game-container');
-        container.style.opacity = '0';
-        container.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-            container.innerHTML = `
-                <div class="home-btn" onclick="showModal()">
-                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                </div>
-                <div id="score-shield">⭐ Score: ${score} / ${questions.length}</div>
-                <div class="progress-wrap"><div id="progress" style="width:${(currentQuestion/questions.length)*100}%"></div></div>
-                <div id="wave-container">
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                </div>
-                <div id="quiz-area"></div>
-            `;
-            container.style.opacity = '1'; container.style.transform = 'translateY(0)';
-            showQuestion();
-        }, 300);
-    }
-
-    async function showQuestion() {
-        if(currentQuestion >= questions.length) { showResults(); return; }
-        state.userClicked = false;
-        const q = questions[currentQuestion];
-        const options = [q.capital];
-        while(options.length < 4) {
-            const rand = data[Math.floor(Math.random() * data.length)].capital;
-            if(!options.includes(rand)) options.push(rand);
-        }
-        options.sort(() => 0.5 - Math.random());
-
-        document.getElementById('quiz-area').innerHTML = `<h3>Capital of ${q.state}?</h3>` +
-            options.map((opt, i) => `<button id="opt-${i}" onclick="handleAnswer('${opt}', '${q.capital}', this)">${String.fromCharCode(65+i)}: ${opt}</button>`).join('');
-
-        const sequence = [
-            { text: `What is the capital of ${pronunciationMap[q.state] || q.state}?` },
-            ...options.map((opt, i) => ({ text: `${String.fromCharCode(65+i)}, ${opt}`, id: `opt-${i}` }))
-        ];
-
-        for(const step of sequence) {
-            if(state.userClicked) break;
-            if(step.id) document.getElementById(step.id).classList.add('highlight-active');
-            await new Promise(resolve => speak(step.text, resolve));
-            if(step.id) document.getElementById(step.id).classList.remove('highlight-active');
-        }
-    }
-
-    function handleAnswer(choice, correct, btn) {
-        if(state.userClicked) return;
-        state.userClicked = true;
-        synth.cancel();
-        if(choice === correct) {
-            score++;
-            document.getElementById('score-shield').innerText = `⭐ Score: ${score} / ${questions.length}`;
-            btn.classList.add('correct');
-            speak("Correct! Great job!", () => setTimeout(() => { currentQuestion++; showQuestion(); }, 2000));
-        } else {
-            btn.classList.add('wrong');
-            document.querySelectorAll('button').forEach(b => { if(b.innerText.includes(correct)) b.classList.add('correct-reveal'); });
-            speak(`Oops! The capital is ${correct}.`, () => setTimeout(() => { currentQuestion++; showQuestion(); }, 2000));
-        }
-    }
-
-    function showModal() { document.getElementById('modal-overlay').style.display = 'flex'; }
-    function closeModal(exit) {
-        document.getElementById('modal-overlay').style.display = 'none';
-        if(exit) { synth.cancel(); location.reload(); }
-    }
-
-    function showResults() {
-        document.getElementById('game-container').innerHTML = `<h2>Mission Complete!</h2><p>Score: ${score} / ${questions.length}</p><button onclick="location.reload()">Main Menu</button>`;
-    }
-</script>
+<script src="data.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
