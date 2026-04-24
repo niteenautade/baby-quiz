@@ -9,16 +9,17 @@ const Engine = {
     historyPushed: false,
     assistTimer: null,
 
-    MODE_MAP: {
-        'math': '🧮 Addition',
-        'subtraction': '➖ Subtraction',
-        'states': '🗺️ Indian States',
-        'uts': '📍 Union Territories',
-        'monuments': '🏰 Indian Monuments',
-        'symbols': '🚩 National Symbols',
-        'families': '🦁 Animal Families',
-        'homes': '🏠 Animal Homes'
-    },
+     MODE_MAP: {
+         'math': '🧮 Addition',
+         'subtraction': '➖ Subtraction',
+         'states': '🗺️ Indian States',
+         'uts': '📍 Union Territories',
+         'monuments': '🏰 Indian Monuments',
+         'symbols': '🚩 National Symbols',
+         'families': '🦁 Animal Families',
+         'homes': '🏠 Animal Homes',
+         'festivals': '🎡 Indian Festivals'
+     },
 
      init(mode) {
          this.mode = mode;
@@ -99,14 +100,15 @@ const Engine = {
 
           this.userClicked = false;
         const q = this.questions[this.currentIdx];
-        const isMath = this.mode === 'math';
-        const isSub = this.mode === 'subtraction';
-        const isMon = this.mode === 'monuments';
-        const isSymbols = this.mode === 'symbols';
-        const isFamilies = this.mode === 'families';
-        const isHomes = this.mode === 'homes';
+          const isMath = this.mode === 'math';
+          const isSub = this.mode === 'subtraction';
+          const isMon = this.mode === 'monuments';
+          const isSymbols = this.mode === 'symbols';
+          const isFamilies = this.mode === 'families';
+           const isHomes = this.mode === 'homes';
+           const isFestivals = this.mode === 'festivals';
 
-        const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
+         const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
         const fruitName = fruitMap[q.fruit] || 'fruit';
         const pluralFruit = fruitName + 's';
 
@@ -236,6 +238,16 @@ const Engine = {
               document.getElementById('monument-image-area').innerHTML = `<h3>${q.name}</h3><img src="${q.image}" class="monument-display" alt="${q.name}">`;
               document.getElementById('quiz-area').innerHTML = `<h3>${q.emoji} Where does a ${q.name} live?</h3>` +
                   options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+          } else if (isFestivals) {
+              document.getElementById('math-equation-area').classList.add('hidden');
+              document.getElementById('counting-zone').classList.add('hidden');
+              document.getElementById('monument-image-area').classList.remove('hidden');
+              document.getElementById('monument-image-area').innerHTML = `
+                  <img src="${q.image}" class="monument-display" alt="${q.name}">
+                  <p class="festival-hint">${q.hint}</p>
+              `;
+              document.getElementById('quiz-area').innerHTML = `<h3>Which festival is this?</h3>` +
+                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
           } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
@@ -273,12 +285,18 @@ const Engine = {
                   { text: `What is a baby ${q.name} called?` },
                   ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
                 ]
-              : isHomes
-              ? [
-                  { text: `Where does a ${q.name} live?` },
-                  ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
-                ]
-              : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
+               : isHomes
+               ? [
+                   { text: `Where does a ${q.name} live?` },
+                   ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                 ]
+               : isFestivals
+               ? [
+                   { text: `Which festival is this?` },
+                   { text: `${q.hint}` },
+                   ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                 ]
+               : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
 
          for (const step of sequence) {
              if (this.userClicked) break;
@@ -345,9 +363,11 @@ const Engine = {
                  ? `Not quite! The ${this.questions[this.currentIdx].name} of India is ${correct}.`
                  : isFamilies
                  ? `Not quite! A baby ${this.questions[this.currentIdx].name} is called ${correct}.`
-                 : isHomes
-                 ? `Not quite! A ${this.questions[this.currentIdx].name} lives in a ${correct}.`
-                 : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
+                  : isHomes
+                  ? `Not quite! A ${this.questions[this.currentIdx].name} lives in a ${correct}.`
+                  : isFestivals
+                  ? `Not quite! That is the ${correct} festival.`
+                  : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
             this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         }
     },
@@ -369,7 +389,12 @@ const Engine = {
 
          document.querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
 
-         await new Promise(r => this.speak("Let me help you with this one!", r));
+         const isFestivals = this.mode === 'festivals';
+         const helpMsg = isFestivals
+             ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
+             : "Let me help you with this one!";
+
+         await new Promise(r => this.speak(helpMsg, r));
 
          correctBtn.classList.add('correct', 'pulse');
 
@@ -391,6 +416,8 @@ const Engine = {
              answerText = `A baby ${this.questions[this.currentIdx].name} is called ${correctAnswer}.`;
          } else if (isHomes) {
              answerText = `A ${this.questions[this.currentIdx].name} lives in a ${correctAnswer}.`;
+         } else if (isFestivals) {
+             answerText = `That is the ${correctAnswer} festival.`;
          } else {
              answerText = `The capital of ${this.questions[this.currentIdx].name} is ${correctAnswer}.`;
          }
