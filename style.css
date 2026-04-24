@@ -71,9 +71,6 @@ button { display: block; width: 100%; padding: 2vh; margin: 1vh 0; border: none;
 .wrong { background: var(--error) !important; color: white; }
 .correct-reveal { border-color: var(--success); }
 
-#modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000; }
-.modal { background: #1e293b; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid var(--accent); }
-
 #wave-container { display: flex; justify-content: center; align-items: center; gap: 4px; height: 50px; margin: 1vh 0; }
 .bar { width: 6px; height: 10px; background: var(--accent); border-radius: 3px; }
 .speaking .bar { animation: wave 1s infinite ease-in-out; }

@@ -6,6 +6,7 @@ const Engine = {
     userClicked: false,
     synth: window.speechSynthesis,
     voice: null,
+    historyPushed: false,
 
     init(mode) {
         this.mode = mode;
@@ -15,11 +16,22 @@ const Engine = {
         this.initVoices();
         this.renderGame();
         this.nextQuestion();
+        this.setupBackButtonHandler();
     },
 
     initVoices() {
         const v = this.synth.getVoices();
         this.voice = v.find(v => v.lang === 'en-IN') || v.find(v => v.lang.startsWith('en')) || v[0];
+    },
+
+    setupBackButtonHandler() {
+        if (this.historyPushed) return;
+        this.historyPushed = true;
+
+        history.pushState({ screen: 'quiz' }, '', '');
+        window.onpopstate = () => {
+            location.reload();
+        };
     },
 
     speak(text, callback) {
@@ -160,7 +172,7 @@ const Engine = {
             this.score++;
             const modeMap = { 'math': '🧮 Addition', 'subtraction': '➖ Subtraction', 'states': '🗺️ Indian States', 'uts': '📍 Union Territories', 'monuments': '🏰 Indian Monuments' };
             const modeTitle = modeMap[this.mode] || '';
-            document.getElementById('score-shield').innerText = `⭐ ${modeTitle} | Score: ${this.score} / ${this.questions.length}`;
+            document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
             btn.classList.add('correct');
             this.speak(isMath || isSub ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
         } else {
@@ -178,15 +190,13 @@ const Engine = {
     },
 
 
-    showModal() { location.reload(); },
-    confirmExit(exit) {
-        location.reload();
-    },
+
 
     showResults() {
         const highScore = localStorage.getItem('highScore_'+this.mode) || 0;
         if(this.score > highScore) localStorage.setItem('highScore_'+this.mode, this.score);
         document.getElementById('game-container').innerHTML = `<h2>Mission Complete!</h2><p>Score: ${this.score} / ${this.questions.length}</p><p>High Score: ${highScore}</p><button onclick="location.reload()">Main Menu</button>`;
+        this.setupBackButtonHandler();
     }
 };
 Engine.synth.onvoiceschanged = () => Engine.initVoices();
