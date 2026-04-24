@@ -136,6 +136,23 @@ const QUIZ_DATA = {
       { name: "National Vegetable", capital: "Pumpkin", category: "vegetable", emoji: "🎃" },
       { name: "National Song", capital: "Vande Mataram", category: "song", emoji: "🎶" },
       { name: "National Anthem", capital: "Jana Gana Mana", category: "anthem", emoji: "🎵" }
+    ],
+    families: [
+      { name: "Lion", capital: "Cub", emoji: "🦁" },
+      { name: "Dog", capital: "Puppy", emoji: "🐶" },
+      { name: "Cat", capital: "Kitten", emoji: "🐱" },
+      { name: "Cow", capital: "Calf", emoji: "🐮" },
+      { name: "Horse", capital: "Foal", emoji: "🐴" },
+      { name: "Duck", capital: "Duckling", emoji: "🦆" },
+      { name: "Sheep", capital: "Lamb", emoji: "🐑" },
+      { name: "Kangaroo", capital: "Joey", emoji: "🦘" },
+      { name: "Pig", capital: "Piglet", emoji: "🐷" },
+      { name: "Deer", capital: "Fawn", emoji: "🦌" },
+      { name: "Goat", capital: "Kid", emoji: "🐐" },
+      { name: "Elephant", capital: "Calf", emoji: "🐘" },
+      { name: "Frog", capital: "Tadpole", emoji: "🐸" },
+      { name: "Bear", capital: "Cub", emoji: "🐻" },
+      { name: "Hen", capital: "Chick", emoji: "🐔" }
     ]
 
 };
