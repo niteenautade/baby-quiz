@@ -30,7 +30,19 @@
     <div id="counting-zone" class="hidden"></div>
 </div>
 
-    <script src="data.js?v=10"></script>
-    <script src="script.js?v=10"></script>
-</body>
+     <script src="data.js?v=10"></script>
+     <script src="script.js?v=10"></script>
+     <script src="https://cdn.jsdelivr.net/npm/pulltorefreshjs@0.1.16/dist/pulltorefresh.min.js"></script>
+     <script>
+         const ptr = PullToRefresh.init({
+             mainElement: '#game-container',
+             onRefresh() {
+                 location.reload();
+             },
+             shouldPullToRefresh() {
+                 return document.querySelector('.mode-btn') !== null;
+             }
+         });
+      </script>
+  </body>
 </html>
