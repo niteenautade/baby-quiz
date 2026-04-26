@@ -256,5 +256,32 @@ const QUIZ_DATA = {
         {"name": "Sewing Machine", "capital": "Tailor", "emoji": "🧵", "image": "assets/helper-images/23_Sewing_Machine.jpg"},
         {"name": "Trash Truck", "capital": "Sanitation Worker", "emoji": "🚛", "image": "assets/helper-images/24_Trash_Truck.jpg"},
         {"name": "Dental Mirror", "capital": "Dentist", "emoji": "🦷", "image": "assets/helper-images/25_Dental_Mirror.jpg"}
+      ],
+      materials: [
+        {"name": "Key", "capital": "Metal", "emoji": "🔑", "image": "assets/material-images/01_Key.jpg"},
+        {"name": "Water Bottle", "capital": "Plastic", "emoji": "🧴", "image": "assets/material-images/02_Water_Bottle.jpg"},
+        {"name": "Window", "capital": "Glass", "emoji": "🪟", "image": "assets/material-images/03_Window.jpg"},
+        {"name": "Table", "capital": "Wood", "emoji": "🪑", "image": "assets/material-images/04_Table.jpg"},
+        {"name": "Teddy Bear", "capital": "Fabric", "emoji": "🧸", "image": "assets/material-images/05_Teddy_Bear.jpg"},
+        {"name": "Spoon", "capital": "Metal", "emoji": "🥄", "image": "assets/material-images/06_Spoon.jpg"},
+        {"name": "Pencil", "capital": "Wood", "emoji": "✏️", "image": "assets/material-images/07_Pencil.jpg"},
+        {"name": "Drinking Glass", "capital": "Glass", "emoji": "🥛", "image": "assets/material-images/08_Drinking_Glass.jpg"},
+        {"name": "T-shirt", "capital": "Fabric", "emoji": "👕", "image": "assets/material-images/09_Tshirt.jpg"},
+        {"name": "Toy Car", "capital": "Plastic", "emoji": "🏎️", "image": "assets/material-images/10_Toy_Car.jpg"},
+        {"name": "Hammer", "capital": "Metal", "emoji": "🔨", "image": "assets/material-images/11_Hammer.jpg"},
+        {"name": "Door", "capital": "Wood", "emoji": "🚪", "image": "assets/material-images/12_Door.jpg"},
+        {"name": "Eyeglasses", "capital": "Glass", "emoji": "👓", "image": "assets/material-images/13_Eyeglasses.jpg"},
+        {"name": "Pillow", "capital": "Fabric", "emoji": "🛌", "image": "assets/material-images/14_Pillow.jpg"},
+        {"name": "Lunch Box", "capital": "Plastic", "emoji": "🍱", "image": "assets/material-images/15_Lunch_Box.jpg"},
+        {"name": "Coin", "capital": "Metal", "emoji": "🪙", "image": "assets/material-images/16_Coin.jpg"},
+        {"name": "Bat", "capital": "Wood", "emoji": "🏏", "image": "assets/material-images/17_Bat.jpg"},
+        {"name": "Mirror", "capital": "Glass", "emoji": "🪞", "image": "assets/material-images/18_Mirror.jpg"},
+        {"name": "Curtains", "capital": "Fabric", "emoji": "カーテン", "image": "assets/material-images/19_Curtains.jpg"},
+        {"name": "Straw", "capital": "Plastic", "emoji": "🥤", "image": "assets/material-images/20_Straw.jpg"},
+        {"name": "Bicycle", "capital": "Metal", "emoji": "🚲", "image": "assets/material-images/21_Bicycle.jpg"},
+        {"name": "Fence", "capital": "Wood", "emoji": "🪵", "image": "assets/material-images/22_Fence.jpg"},
+        {"name": "Lightbulb", "capital": "Glass", "emoji": "💡", "image": "assets/material-images/23_Lightbulb.jpg"},
+        {"name": "Socks", "capital": "Fabric", "emoji": "🧦", "image": "assets/material-images/24_Socks.jpg"},
+        {"name": "Bucket", "capital": "Plastic", "emoji": "🪣", "image": "assets/material-images/25_Bucket.jpg"}
       ]
      }

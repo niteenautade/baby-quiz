@@ -20,7 +20,8 @@ const Engine = {
           'homes': '🏠 Animal Homes',
           'festivals': '🎡 Indian Festivals',
           'body': '🧠 Human Body',
-          'helpers': '👨‍🚒 Community Helpers'
+          'helpers': '👨‍🚒 Community Helpers',
+          'materials': '🧱 Material World'
       },
 
      init(mode) {
@@ -111,8 +112,9 @@ const Engine = {
             const isFestivals = this.mode === 'festivals';
             const isBody = this.mode === 'body';
             const isHelpers = this.mode === 'helpers';
+            const isMaterials = this.mode === 'materials';
 
-           const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
+            const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
         const fruitName = fruitMap[q.fruit] || 'fruit';
         const pluralFruit = fruitName + 's';
 
@@ -179,6 +181,13 @@ const Engine = {
             const professionals = QUIZ_DATA.helpers.map(item => item.capital);
             const otherPros = professionals.filter(prof => prof !== q.capital);
             const shuffledOthers = otherPros.sort(() => 0.5 - Math.random());
+            const distractors = shuffledOthers.slice(0, 3);
+            options = [q.capital, ...distractors].sort(() => 0.5 - Math.random());
+        } else if (isMaterials) {
+            // All options are from the fixed set: Metal, Wood, Plastic, Glass, Fabric
+            const allMaterials = ["Metal", "Wood", "Plastic", "Glass", "Fabric"];
+            const otherMaterials = allMaterials.filter(mat => mat !== q.capital);
+            const shuffledOthers = otherMaterials.sort(() => 0.5 - Math.random());
             const distractors = shuffledOthers.slice(0, 3);
             options = [q.capital, ...distractors].sort(() => 0.5 - Math.random());
         } else {
@@ -278,7 +287,17 @@ const Engine = {
                `;
                document.getElementById('quiz-area').innerHTML = `<h3>Who uses this ${q.name} to help us?</h3>` +
                    options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
-           } else {
+            } else if (isMaterials) {
+                document.getElementById('math-equation-area').classList.add('hidden');
+                document.getElementById('counting-zone').classList.add('hidden');
+                document.getElementById('monument-image-area').classList.remove('hidden');
+                document.getElementById('monument-image-area').innerHTML = `
+                    <h3>${q.name}</h3>
+                    <img src="${q.image}" class="monument-display" alt="${q.name}">
+                `;
+                document.getElementById('quiz-area').innerHTML = `<h3>What is this made of?</h3>` +
+                    options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+            } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             const questionText = isMon ? `In which city is ${q.name} located?` : `What is the capital of ${q.name}?`;
@@ -336,6 +355,11 @@ const Engine = {
                      { text: `Who uses this ${q.name} to help us?` },
                      ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
                    ]
+                  : isMaterials
+                  ? [
+                      { text: `What is this made of?` },
+                      ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                    ]
                  : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
 
          for (const step of sequence) {
@@ -384,8 +408,9 @@ const Engine = {
           const isFamilies = this.mode === 'families';
           const isHomes = this.mode === 'homes';
           const isFestivals = this.mode === 'festivals';
-          const isBody = this.mode === 'body';
-          const isHelpers = this.mode === 'helpers';
+            const isBody = this.mode === 'body';
+            const isHelpers = this.mode === 'helpers';
+            const isMaterials = this.mode === 'materials';
 
            if (choice === correct) {
               this.score++;
@@ -412,9 +437,11 @@ const Engine = {
                     ? `Not quite! That is the ${correct} festival.`
                     : isBody
                     ? `Not quite! The answer is the ${correct}.`
-                    : isHelpers
-                    ? `Not quite! A ${correct} uses the ${this.questions[this.currentIdx].name}.`
-                    : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
+                     : isHelpers
+                     ? `Not quite! A ${correct} uses the ${this.questions[this.currentIdx].name}.`
+                     : isMaterials
+                     ? `Not quite! The ${this.questions[this.currentIdx].name} is made of ${correct}.`
+                     : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
              this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
          }
     },
@@ -436,15 +463,18 @@ const Engine = {
 
           document.querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
 
-            const isBody = this.mode === 'body';
-            const isHelpers = this.mode === 'helpers';
-            const helpMsg = isFestivals
-                ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
-                : isBody
-                ? `Let me help! The answer is the ${correctAnswer}.`
-                : isHelpers
-                ? `I can help! A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`
-                : "Let me help you with this one!";
+             const isBody = this.mode === 'body';
+             const isHelpers = this.mode === 'helpers';
+             const isMaterials = this.mode === 'materials';
+             const helpMsg = isFestivals
+               ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
+               : isBody
+               ? `Let me help! The answer is the ${correctAnswer}.`
+               : isHelpers
+               ? `I can help! A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`
+               : isMaterials
+               ? `I can help! The ${this.questions[this.currentIdx].name} is made of ${correctAnswer}.`
+               : "Let me help you with this one!";
 
           await new Promise(r => this.speak(helpMsg, r));
 
@@ -474,6 +504,8 @@ const Engine = {
                 answerText = `That's right! The answer is ${correctAnswer}.`;
             } else if (isHelpers) {
                 answerText = `A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`;
+            } else if (isMaterials) {
+                answerText = `The ${this.questions[this.currentIdx].name} is made of ${correctAnswer}.`;
             } else {
                answerText = `The capital of ${this.questions[this.currentIdx].name} is ${correctAnswer}.`;
            }
