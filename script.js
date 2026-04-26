@@ -357,6 +357,7 @@ const Engine = {
                    ]
                   : isMaterials
                   ? [
+                      { text: `${q.name}` },
                       { text: `What is this made of?` },
                       ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
                     ]
