@@ -237,7 +237,7 @@ const QUIZ_DATA = {
         {"name": "Chalkboard", "capital": "Teacher", "emoji": "🧑‍🏫", "image": "assets/helper-images/04_Chalkboard.jpg"},
         {"name": "Baking Oven", "capital": "Baker", "emoji": "🥯", "image": "assets/helper-images/05_Baking_Oven.jpg"},
         {"name": "Airplane", "capital": "Pilot", "emoji": "✈️", "image": "assets/helper-images/06_Airplane.jpg"},
-        {"name": "Mail Bag", "capital": "Mail Carrier", "emoji": "📬", "image": "assets/helper-images/07_Mail_Bag.jpg"},
+        {"name": "Mail Bag", "capital": "Postman", "emoji": "📬", "image": "assets/helper-images/07_Mail_Bag.jpg"},
         {"name": "Paint Palette", "capital": "Artist", "emoji": "🎨", "image": "assets/helper-images/08_Paint_Palette.jpg"},
         {"name": "Microscope", "capital": "Scientist", "emoji": "🔬", "image": "assets/helper-images/09_Microscope.jpg"},
         {"name": "Wrench", "capital": "Mechanic", "emoji": "🔧", "image": "assets/helper-images/10_Wrench.jpg"},
