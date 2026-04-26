@@ -10,17 +10,18 @@ const Engine = {
     assistTimer: null,
 
      MODE_MAP: {
-         'math': '🧮 Addition',
-         'subtraction': '➖ Subtraction',
-         'states': '🗺️ Indian States',
-         'uts': '📍 Union Territories',
-         'monuments': '🏰 Indian Monuments',
-         'symbols': '🚩 National Symbols',
-         'families': '🦁 Animal Families',
-         'homes': '🏠 Animal Homes',
-         'festivals': '🎡 Indian Festivals',
-         'body': '🧠 Human Body'
-     },
+          'math': '🧮 Addition',
+          'subtraction': '➖ Subtraction',
+          'states': '🗺️ Indian States',
+          'uts': '📍 Union Territories',
+          'monuments': '🏰 Indian Monuments',
+          'symbols': '🚩 National Symbols',
+          'families': '🦁 Animal Families',
+          'homes': '🏠 Animal Homes',
+          'festivals': '🎡 Indian Festivals',
+          'body': '🧠 Human Body',
+          'helpers': '👨‍🚒 Community Helpers'
+      },
 
      init(mode) {
          this.mode = mode;
@@ -106,9 +107,10 @@ const Engine = {
           const isMon = this.mode === 'monuments';
           const isSymbols = this.mode === 'symbols';
           const isFamilies = this.mode === 'families';
-           const isHomes = this.mode === 'homes';
-           const isFestivals = this.mode === 'festivals';
-           const isBody = this.mode === 'body';
+            const isHomes = this.mode === 'homes';
+            const isFestivals = this.mode === 'festivals';
+            const isBody = this.mode === 'body';
+            const isHelpers = this.mode === 'helpers';
 
            const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
         const fruitName = fruitMap[q.fruit] || 'fruit';
@@ -170,6 +172,13 @@ const Engine = {
             const babyNames = QUIZ_DATA.families.map(item => item.capital);
             const otherBabies = babyNames.filter(name => name !== q.capital);
             const shuffledOthers = otherBabies.sort(() => 0.5 - Math.random());
+            const distractors = shuffledOthers.slice(0, 3);
+            options = [q.capital, ...distractors].sort(() => 0.5 - Math.random());
+        } else if (isHelpers) {
+            // All options are professionals from the helpers array
+            const professionals = QUIZ_DATA.helpers.map(item => item.capital);
+            const otherPros = professionals.filter(prof => prof !== q.capital);
+            const shuffledOthers = otherPros.sort(() => 0.5 - Math.random());
             const distractors = shuffledOthers.slice(0, 3);
             options = [q.capital, ...distractors].sort(() => 0.5 - Math.random());
         } else {
@@ -250,16 +259,26 @@ const Engine = {
               `;
               document.getElementById('quiz-area').innerHTML = `<h3>Which festival is this?</h3>` +
                   options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
-          } else if (isBody) {
-              document.getElementById('math-equation-area').classList.add('hidden');
-              document.getElementById('counting-zone').classList.add('hidden');
-              document.getElementById('monument-image-area').classList.remove('hidden');
-              document.getElementById('monument-image-area').innerHTML = `
-                  <img src="${q.image}" class="monument-display" alt="${q.name}">
-              `;
-              document.getElementById('quiz-area').innerHTML = `<h3>${q.name}</h3>` +
-                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
-          } else {
+           } else if (isBody) {
+               document.getElementById('math-equation-area').classList.add('hidden');
+               document.getElementById('counting-zone').classList.add('hidden');
+               document.getElementById('monument-image-area').classList.remove('hidden');
+               document.getElementById('monument-image-area').innerHTML = `
+                   <img src="${q.image}" class="monument-display" alt="${q.name}">
+               `;
+               document.getElementById('quiz-area').innerHTML = `<h3>${q.name}</h3>` +
+                   options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+           } else if (isHelpers) {
+               document.getElementById('math-equation-area').classList.add('hidden');
+               document.getElementById('counting-zone').classList.add('hidden');
+               document.getElementById('monument-image-area').classList.remove('hidden');
+               document.getElementById('monument-image-area').innerHTML = `
+                   <h3>${q.name}</h3>
+                   <img src="${q.image}" class="monument-display" alt="${q.name}">
+               `;
+               document.getElementById('quiz-area').innerHTML = `<h3>Who uses this ${q.name} to help us?</h3>` +
+                   options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+           } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             const questionText = isMon ? `In which city is ${q.name} located?` : `What is the capital of ${q.name}?`;
@@ -307,12 +326,17 @@ const Engine = {
                     { text: `${q.hint}` },
                     ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
                   ]
-                : isBody
-                ? [
-                    { text: `${q.name}` },
-                    ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
-                  ]
-                : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
+                 : isBody
+                 ? [
+                     { text: `${q.name}` },
+                     ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                   ]
+                 : isHelpers
+                 ? [
+                     { text: `Who uses this ${q.name} to help us?` },
+                     ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                   ]
+                 : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
 
          for (const step of sequence) {
              if (this.userClicked) break;
@@ -356,38 +380,43 @@ const Engine = {
          const isMath = this.mode === 'math';
          const isSub = this.mode === 'subtraction';
          const isMon = this.mode === 'monuments';
-         const isSymbols = this.mode === 'symbols';
-         const isFamilies = this.mode === 'families';
-         const isHomes = this.mode === 'homes';
+          const isSymbols = this.mode === 'symbols';
+          const isFamilies = this.mode === 'families';
+          const isHomes = this.mode === 'homes';
+          const isFestivals = this.mode === 'festivals';
+          const isBody = this.mode === 'body';
+          const isHelpers = this.mode === 'helpers';
 
-          if (choice === correct) {
-             this.score++;
-             const modeTitle = this.MODE_MAP[this.mode] || '';
-             document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
-            btn.classList.add('correct');
-            this.speak(isMath || isSub ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
-        } else {
-            btn.classList.add('wrong');
-            document.querySelectorAll('button').forEach(b => { if(b.innerText.includes(correct)) b.classList.add('correct-reveal'); });
-             const msg = isMath
-                 ? `Not quite! ${this.questions[this.currentIdx].name} is ${correct}.`
-                 : isSub
-                 ? `Not quite! ${this.questions[this.currentIdx].num1} minus ${this.questions[this.currentIdx].num2} is ${correct}.`
-                 : isMon
-                 ? `Oops! The ${this.questions[this.currentIdx].name} is actually in ${correct}.`
-                 : isSymbols
-                 ? `Not quite! The ${this.questions[this.currentIdx].name} of India is ${correct}.`
-                 : isFamilies
-                 ? `Not quite! A baby ${this.questions[this.currentIdx].name} is called ${correct}.`
-                   : isHomes
-                   ? `Not quite! A ${this.questions[this.currentIdx].name} lives in a ${correct}.`
-                   : isFestivals
-                   ? `Not quite! That is the ${correct} festival.`
-                   : isBody
-                   ? `Not quite! The answer is the ${correct}.`
-                   : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
-            this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
-        }
+           if (choice === correct) {
+              this.score++;
+              const modeTitle = this.MODE_MAP[this.mode] || '';
+              document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
+             btn.classList.add('correct');
+             this.speak(isMath || isSub ? "That's right!" : "Correct! Great job!", () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
+         } else {
+             btn.classList.add('wrong');
+             document.querySelectorAll('button').forEach(b => { if(b.innerText.includes(correct)) b.classList.add('correct-reveal'); });
+              const msg = isMath
+                  ? `Not quite! ${this.questions[this.currentIdx].name} is ${correct}.`
+                  : isSub
+                  ? `Not quite! ${this.questions[this.currentIdx].num1} minus ${this.questions[this.currentIdx].num2} is ${correct}.`
+                  : isMon
+                  ? `Oops! The ${this.questions[this.currentIdx].name} is actually in ${correct}.`
+                  : isSymbols
+                  ? `Not quite! The ${this.questions[this.currentIdx].name} of India is ${correct}.`
+                  : isFamilies
+                  ? `Not quite! A baby ${this.questions[this.currentIdx].name} is called ${correct}.`
+                    : isHomes
+                    ? `Not quite! A ${this.questions[this.currentIdx].name} lives in a ${correct}.`
+                    : isFestivals
+                    ? `Not quite! That is the ${correct} festival.`
+                    : isBody
+                    ? `Not quite! The answer is the ${correct}.`
+                    : isHelpers
+                    ? `Not quite! A ${correct} uses the ${this.questions[this.currentIdx].name}.`
+                    : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
+             this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
+         }
     },
 
 
@@ -407,13 +436,15 @@ const Engine = {
 
           document.querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
 
-          const isFestivals = this.mode === 'festivals';
-          const isBody = this.mode === 'body';
-          const helpMsg = isFestivals
-              ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
-              : isBody
-              ? `Let me help! The answer is the ${correctAnswer}.`
-              : "Let me help you with this one!";
+            const isBody = this.mode === 'body';
+            const isHelpers = this.mode === 'helpers';
+            const helpMsg = isFestivals
+                ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
+                : isBody
+                ? `Let me help! The answer is the ${correctAnswer}.`
+                : isHelpers
+                ? `I can help! A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`
+                : "Let me help you with this one!";
 
           await new Promise(r => this.speak(helpMsg, r));
 
@@ -439,11 +470,13 @@ const Engine = {
               answerText = `A ${this.questions[this.currentIdx].name} lives in a ${correctAnswer}.`;
           } else if (isFestivals) {
               answerText = `That is the ${correctAnswer} festival.`;
-           } else if (isBody) {
-               answerText = `That's right! The answer is ${correctAnswer}.`;
-           } else {
-              answerText = `The capital of ${this.questions[this.currentIdx].name} is ${correctAnswer}.`;
-          }
+            } else if (isBody) {
+                answerText = `That's right! The answer is ${correctAnswer}.`;
+            } else if (isHelpers) {
+                answerText = `A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`;
+            } else {
+               answerText = `The capital of ${this.questions[this.currentIdx].name} is ${correctAnswer}.`;
+           }
 
          await new Promise(r => this.speak(answerText, r));
 

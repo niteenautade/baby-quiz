@@ -213,7 +213,7 @@ const QUIZ_DATA = {
        { name: "Losar", capital: "Losar", hint: "Tibetan New Year", emoji: "🏔️", image: "assets/festival-images/39_Losar.jpg" },
        { name: "Bathukamma", capital: "Bathukamma", hint: "Flower festival of Telangana", emoji: "🌸", image: "assets/festival-images/40_Bathukamma.jpg" }
      ],
-       body: [
+     body: [
         { name: "Which organ helps us breathe?", capital: "Lungs", emoji: "🫁", image: "assets/body-images/01_Lungs.jpg" },
         { name: "Which organ pumps blood to our body?", capital: "Heart", emoji: "❤️", image: "assets/body-images/02_Heart.jpg" },
         { name: "Which part helps us think and learn?", capital: "Brain", emoji: "🧠", image: "assets/body-images/03_Brain.jpg" },
@@ -229,5 +229,32 @@ const QUIZ_DATA = {
         { name: "Which part helps us walk and run?", capital: "Legs", emoji: "🦵", image: "assets/body-images/13_Legs.jpg" },
         { name: "Which part helps our arms bend?", capital: "Elbow", emoji: "💪", image: "assets/body-images/14_Elbow.jpg" },
         { name: "Which part helps our legs bend?", capital: "Knee", emoji: "🦵", image: "assets/body-images/15_Knee.jpg" }
+      ],
+      helpers: [
+        {"name": "Stethoscope", "capital": "Doctor", "emoji": "🩺", "image": "assets/helper-images/01_Stethoscope.jpg"},
+        {"name": "Fire Truck", "capital": "Firefighter", "emoji": "🚒", "image": "assets/helper-images/02_Fire_Truck.jpg"},
+        {"name": "Police Car", "capital": "Police Officer", "emoji": "🚓", "image": "assets/helper-images/03_Police_Car.jpg"},
+        {"name": "Chalkboard", "capital": "Teacher", "emoji": "🧑‍🏫", "image": "assets/helper-images/04_Chalkboard.jpg"},
+        {"name": "Baking Oven", "capital": "Baker", "emoji": "🥯", "image": "assets/helper-images/05_Baking_Oven.jpg"},
+        {"name": "Airplane", "capital": "Pilot", "emoji": "✈️", "image": "assets/helper-images/06_Airplane.jpg"},
+        {"name": "Mail Bag", "capital": "Mail Carrier", "emoji": "📬", "image": "assets/helper-images/07_Mail_Bag.jpg"},
+        {"name": "Paint Palette", "capital": "Artist", "emoji": "🎨", "image": "assets/helper-images/08_Paint_Palette.jpg"},
+        {"name": "Microscope", "capital": "Scientist", "emoji": "🔬", "image": "assets/helper-images/09_Microscope.jpg"},
+        {"name": "Wrench", "capital": "Mechanic", "emoji": "🔧", "image": "assets/helper-images/10_Wrench.jpg"},
+        {"name": "Spaceship", "capital": "Astronaut", "emoji": "🚀", "image": "assets/helper-images/11_Spaceship.jpg"},
+        {"name": "Frying Pan", "capital": "Chef", "emoji": "🍳", "image": "assets/helper-images/12_Frying_Pan.jpg"},
+        {"name": "Gardening Hoe", "capital": "Gardener", "emoji": "🪴", "image": "assets/helper-images/13_Gardening_Hoe.jpg"},
+        {"name": "Library Books", "capital": "Librarian", "emoji": "📚", "image": "assets/helper-images/14_Library_Books.jpg"},
+        {"name": "Bus", "capital": "Bus Driver", "emoji": "🚌", "image": "assets/helper-images/15_Bus.jpg"},
+        {"name": "Tractor", "capital": "Farmer", "emoji": "🚜", "image": "assets/helper-images/16_Tractor.jpg"},
+        {"name": "Thermometer", "capital": "Nurse", "emoji": "🌡️", "image": "assets/helper-images/17_Thermometer.jpg"},
+        {"name": "Hammer", "capital": "Carpenter", "emoji": "🔨", "image": "assets/helper-images/18_Hammer.jpg"},
+        {"name": "Whistle", "capital": "Coach", "emoji": "📢", "image": "assets/helper-images/19_Whistle.jpg"},
+        {"name": "Microphone", "capital": "Singer", "emoji": "🎤", "image": "assets/helper-images/20_Microphone.jpg"},
+        {"name": "Camera", "capital": "Photographer", "emoji": "📷", "image": "assets/helper-images/21_Camera.jpg"},
+        {"name": "Computer", "capital": "Programmer", "emoji": "💻", "image": "assets/helper-images/22_Computer.jpg"},
+        {"name": "Sewing Machine", "capital": "Tailor", "emoji": "🧵", "image": "assets/helper-images/23_Sewing_Machine.jpg"},
+        {"name": "Trash Truck", "capital": "Sanitation Worker", "emoji": "🚛", "image": "assets/helper-images/24_Trash_Truck.jpg"},
+        {"name": "Dental Mirror", "capital": "Dentist", "emoji": "🦷", "image": "assets/helper-images/25_Dental_Mirror.jpg"}
       ]
-    }
+     }
