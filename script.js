@@ -294,17 +294,26 @@ const Engine = {
                `;
                document.getElementById('quiz-area').innerHTML = `<h3>Who uses this ${q.name} to help us?</h3>` +
                    options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
-            } else if (isMaterials) {
-                document.getElementById('math-equation-area').classList.add('hidden');
-                document.getElementById('counting-zone').classList.add('hidden');
-                document.getElementById('monument-image-area').classList.remove('hidden');
-                document.getElementById('monument-image-area').innerHTML = `
-                    <h3>${q.name}</h3>
-                    <img src="${q.image}" class="monument-display" alt="${q.name}">
-                `;
-                document.getElementById('quiz-area').innerHTML = `<h3>What is this made of?</h3>` +
-                    options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
-            } else {
+} else if (isMaterials) {
+                 document.getElementById('math-equation-area').classList.add('hidden');
+                 document.getElementById('counting-zone').classList.add('hidden');
+                 document.getElementById('monument-image-area').classList.remove('hidden');
+                 document.getElementById('monument-image-area').innerHTML = `
+                     <h3>${q.name}</h3>
+                     <img src="${q.image}" class="monument-display" alt="${q.name}">
+                 `;
+                 document.getElementById('quiz-area').innerHTML = `<h3>What is this made of?</h3>` +
+                     options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+             } else if (isHabits) {
+                 document.getElementById('math-equation-area').classList.add('hidden');
+                 document.getElementById('counting-zone').classList.add('hidden');
+                 document.getElementById('monument-image-area').classList.remove('hidden');
+                 document.getElementById('monument-image-area').innerHTML = `
+                     <img src="${q.image}" class="monument-display" alt="${q.name}">
+                 `;
+                 document.getElementById('quiz-area').innerHTML = `<h3>Is it a good habit or bad habit?</h3>` +
+                     options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
+             } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
             const questionText = isMon ? `In which city is ${q.name} located?` : isHabits ? `Is it a good habit or bad habit - ${q.name}?` : `What is the capital of ${q.name}?`;
@@ -480,19 +489,21 @@ const isMaterials = this.mode === 'materials';
 
           document.querySelectorAll('button').forEach(b => b.style.pointerEvents = 'none');
 
-             const isBody = this.mode === 'body';
-             const isHelpers = this.mode === 'helpers';
-const isMaterials = this.mode === 'materials';
-            const isHabits = this.mode === 'habits';
-             const helpMsg = isFestivals
-               ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
-               : isBody
-               ? `Let me help! The answer is the ${correctAnswer}.`
-               : isHelpers
-               ? `I can help! A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`
-               : isMaterials
-               ? `I can help! The ${this.questions[this.currentIdx].name} is made of ${correctAnswer}.`
-               : "Let me help you with this one!";
+const isBody = this.mode === 'body';
+              const isHelpers = this.mode === 'helpers';
+              const isMaterials = this.mode === 'materials';
+              const isHabits = this.mode === 'habits';
+              const helpMsg = isFestivals
+                ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
+                : isBody
+                ? `Let me help! The answer is the ${correctAnswer}.`
+                : isHelpers
+                ? `I can help! A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`
+                : isMaterials
+                ? `I can help! The ${this.questions[this.currentIdx].name} is made of ${correctAnswer}.`
+                : isHabits
+                ? `I can help! That's a ${correctAnswer}.`
+                : "Let me help you with this one!";
 
           await new Promise(r => this.speak(helpMsg, r));
 
@@ -524,6 +535,8 @@ const isMaterials = this.mode === 'materials';
                 answerText = `A ${correctAnswer} uses the ${this.questions[this.currentIdx].name}.`;
             } else if (isMaterials) {
                 answerText = `The ${this.questions[this.currentIdx].name} is made of ${correctAnswer}.`;
+            } else if (isHabits) {
+                answerText = `That's a ${correctAnswer}.`;
             } else {
                answerText = `The capital of ${this.questions[this.currentIdx].name} is ${correctAnswer}.`;
            }
