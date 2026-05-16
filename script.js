@@ -311,7 +311,7 @@ const Engine = {
                  document.getElementById('monument-image-area').innerHTML = `
                      <img src="${q.image}" class="monument-display" alt="${q.name}">
                  `;
-                 document.getElementById('quiz-area').innerHTML = `<h3>Is it a good habit or bad habit?</h3>` +
+                 document.getElementById('quiz-area').innerHTML = `<h3>Is it a good habit or bad habit?</h3><h2>${q.name}?</h2>` +
                      options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
              } else {
             document.getElementById('math-equation-area').classList.add('hidden');
@@ -379,7 +379,7 @@ const Engine = {
                      ]
                    : isHabits
                    ? [
-                       { text: `Is it a good habit or bad habit?` },
+                       { text: `` },
                        { text: `${q.phonetic}` },
                        ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
                      ]
