@@ -424,9 +424,10 @@ const Engine = {
           const isFestivals = this.mode === 'festivals';
             const isBody = this.mode === 'body';
             const isHelpers = this.mode === 'helpers';
-            const isMaterials = this.mode === 'materials';
+const isMaterials = this.mode === 'materials';
+            const isHabits = this.mode === 'habits';
 
-           if (choice === correct) {
+            if (choice === correct) {
               this.score++;
               const modeTitle = this.MODE_MAP[this.mode] || '';
               document.getElementById('score-shield').innerText = `⭐ Score: ${this.score} / ${this.questions.length}`;
@@ -453,9 +454,11 @@ const Engine = {
                     ? `Not quite! The answer is the ${correct}.`
                      : isHelpers
                      ? `Not quite! A ${correct} uses the ${this.questions[this.currentIdx].name}.`
-                     : isMaterials
-                     ? `Not quite! The ${this.questions[this.currentIdx].name} is made of ${correct}.`
-                     : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
+: isMaterials
+                      ? `Not quite! The ${this.questions[this.currentIdx].name} is made of ${correct}.`
+                      : isHabits
+                      ? `Not quite! That's a ${correct}.`
+                      : `Oops! The capital of ${this.questions[this.currentIdx].name} is ${correct}.`;
              this.speak(msg, () => setTimeout(() => { this.currentIdx++; this.nextQuestion(); }, 2000));
          }
     },
