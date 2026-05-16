@@ -21,8 +21,9 @@ const Engine = {
           'festivals': '🎡 Indian Festivals',
           'body': '🧠 Human Body',
           'helpers': '👨‍🚒 Community Helpers',
-          'materials': '🧱 Material World'
-      },
+'materials': '🧱 Material World',
+           'habits': '✨ Habits'
+       },
 
      init(mode) {
          this.mode = mode;
@@ -113,6 +114,7 @@ const Engine = {
             const isBody = this.mode === 'body';
             const isHelpers = this.mode === 'helpers';
             const isMaterials = this.mode === 'materials';
+            const isHabits = this.mode === 'habits';
 
             const fruitMap = { '🍎': 'apple', '🍌': 'banana', '🍓': 'strawberry', '🍊': 'orange', '🍇': 'grape', '🥭': 'mango' };
         const fruitName = fruitMap[q.fruit] || 'fruit';
@@ -190,6 +192,11 @@ const Engine = {
             const shuffledOthers = otherMaterials.sort(() => 0.5 - Math.random());
             const distractors = shuffledOthers.slice(0, 3);
             options = [q.capital, ...distractors].sort(() => 0.5 - Math.random());
+        } else if (isHabits) {
+            // Only two options: Good Habit or Bad Habit
+            const allHabits = ["Good Habit", "Bad Habit"];
+            const otherHabits = allHabits.filter(habit => habit !== q.capital);
+            options = [q.capital, ...otherHabits].sort(() => 0.5 - Math.random());
         } else {
             // Standard option generation for other modes
             options = [q.capital];
@@ -300,7 +307,7 @@ const Engine = {
             } else {
             document.getElementById('math-equation-area').classList.add('hidden');
             document.getElementById('counting-zone').classList.add('hidden');
-            const questionText = isMon ? `In which city is ${q.name} located?` : `What is the capital of ${q.name}?`;
+            const questionText = isMon ? `In which city is ${q.name} located?` : isHabits ? `Is it a good habit or bad habit - ${q.name}?` : `What is the capital of ${q.name}?`;
              document.getElementById('quiz-area').innerHTML = `<h3>${questionText}</h3>` +
                  options.map((opt, i) => `<button id="opt-${i}" data-answer="${opt}" onclick="Engine.check('${opt}', '${q.capital}', this)">${opt}</button>`).join('');
         }
@@ -355,13 +362,19 @@ const Engine = {
                      { text: `Who uses this ${q.name} to help us?` },
                      ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
                    ]
-                  : isMaterials
-                  ? [
-                      { text: `${q.name}` },
-                      { text: `What is this made of?` },
-                      ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
-                    ]
-                 : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
+: isMaterials
+                   ? [
+                       { text: `${q.name}` },
+                       { text: `What is this made of?` },
+                       ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                     ]
+                   : isHabits
+                   ? [
+                       { text: `Is it a good habit or bad habit?` },
+                       { text: `${q.phonetic}` },
+                       ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))
+                     ]
+                  : [{ text: `What is the capital of ${q.phonetic}?` }, ...options.map((opt, i) => ({ text: `${opt}`, id: `opt-${i}` }))];
 
          for (const step of sequence) {
              if (this.userClicked) break;
@@ -466,7 +479,8 @@ const Engine = {
 
              const isBody = this.mode === 'body';
              const isHelpers = this.mode === 'helpers';
-             const isMaterials = this.mode === 'materials';
+const isMaterials = this.mode === 'materials';
+            const isHabits = this.mode === 'habits';
              const helpMsg = isFestivals
                ? `Let me help! This is ${correctAnswer}. ${this.questions[this.currentIdx].hint}.`
                : isBody
